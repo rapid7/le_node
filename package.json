@@ -1,0 +1,22 @@
+{
+  "name": "node-logentries",
+  "description": "logentries.com",
+  "keywords": ["wrapper","api"],
+  "version": "0.0.1",
+  "homepage": "https://github.com/rjrodger/node-logentries",
+  "author": "Richard Rodger <richard@chartaca.com> (http://richardrodger.com/)",
+  "contributors": [
+    "Richard Rodger <richard@chartaca.com> (http://richardrodger.com/)"
+  ],
+  "dependencies": {
+
+  },
+  "main": "lib/logentries",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": { "type" : "git", "url" : "https://github.com/rjrodger/node-logentries.git" },
+  "engines": {
+    "node": "*"
+  }
+}
