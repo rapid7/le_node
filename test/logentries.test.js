@@ -5,10 +5,10 @@ var logentries = require('../lib/logentries')
 var assert = require('assert')
 
 
-function arreq( a, b ) {
+function arreq( from, a, b ) {
   if( a.length != b.length ) return false;
 
-  for( var i = 0; i < a.length; i++ ) {
+  for( var i = from; i < a.length; i++ ) {
     if( ''+a[i] != ''+b[i] ) return false;
   }
 
@@ -30,8 +30,9 @@ function SimpleTestTransport( expect ) {
     while( 0 < queue.length ) {
       var entry = queue.shift()
       var check = expect[index]
+      check.unshift('date')
       //console.log(check,entry)
-      assert.ok( arreq(check,entry) )
+      assert.ok( arreq(1,check,entry) )
       index++
     }
   }
@@ -61,14 +62,16 @@ function ConnectingTestTransport( expect ) {
 
       var entry = queue.shift()
       var check = expect[index]
-      assert.ok( arreq(check,entry) )
+      check.unshift('date')
+
+      assert.ok( arreq(1,check,entry) )
       index++
     }
   }
 
   function connect() {
     setTimeout(function(){
-      console.log('reconnect,q.len='+queue.length)
+      //console.log('reconnect,q.len='+queue.length)
       process()
     },500*Math.random())
   }
@@ -90,6 +93,31 @@ function ConnectingTestTransport( expect ) {
   self.ok = function() {
     assert.equal( expect.length, index )
   }
+}
+
+
+function EventingTransport() {
+  var self = this
+
+
+  var queue = null
+
+  self.queue = function( q ) {
+    queue = q
+  }
+
+  self.consume = function() {
+    while( 0 < queue.length ) {
+      var entry = queue.shift()
+
+      self.logger.emit('log',entry.join(' '))
+    }
+  }
+
+  self.end = function() {
+    self.logger.emit('end')
+  }
+
 }
 
 
@@ -117,20 +145,33 @@ module.exports = {
     t.ok()
 
     var log = logentries.logger({transport:t=new SimpleTestTransport([
-      ['err','t1'],
-      ['crit','t2'],
-      ['alert','t3'],
-      ['emerg','t4']
+      ['err','t4'],
+      ['crit','t5'],
+      ['alert','t6'],
+      ['emerg','t7']
     ])})
 
     log.level('err')
 
-    log.err('t1')
-    log.crit('t2')
-    log.alert('t3')
-    log.emerg('t4')
+    log.debug('t0')
+    log.info('t1')
+    log.notice('t2')
+    log.warning('t3')
+    log.err('t4')
+    log.crit('t5')
+    log.alert('t6')
+    log.emerg('t7')
     t.ok()
+
+    try {
+      log.level('bogus')
+      assert.fail()
+    }
+    catch(e) {
+      assert.equal("unknown log level: bogus",e.message)
+    }
   },
+
 
   connecting: function() {
     var t = null
@@ -154,8 +195,74 @@ module.exports = {
       }
     }
     logit(0)
+  },
 
+  
+  vartypes: function() {
+    var t = null
+    var d = new Date()
+
+    var log = logentries.logger({transport:t=new SimpleTestTransport([
+      ['info','true'],
+      ['info','11'],
+      ['info','str'],
+      ['info',d.toISOString()],
+      ['info','function (){return "fn"}'],
+      ['info','{"a":"1","b":"2"}'],
+      ['info','["a","b"]'],
+    ])})
+
+    log.info(true)
+    log.info(11)
+    log.info("str")
+    log.info(d)
+    log.info(function(){return "fn"})
+    log.info({a:'1',b:'2'})
+    log.info(['a','b'])
+
+    t.ok()
+  },
+
+  
+  events: function() {
+    var t = null
+    var d = new Date()
+
+    var errors   = []
+    var loglines = []
+
+    var log = logentries.logger({transport:t=new EventingTransport()})
+    t.logger = log
+   
+    log.on('error',function(err) {
+      errors.push(err)
+    })
+
+    log.on('log',function(logline) {
+      loglines.push(logline)
+    })
+
+    log.on('end',function() {
+      loglines.push('end')
+    })
+
+
+    log.emit('error','drill')
+ 
+    log.debug('t0')
+    log.info('t1')
+    log.warning('t2')
+
+    log.end()
+
+    assert.equal(1,errors.length)
+    assert.equal('drill',errors[0])
+
+    assert.equal(4,loglines.length)
+    assert.ok( /debug t0$/.test(loglines[0]) )
+    assert.ok( /info t1$/.test(loglines[1]) )
+    assert.ok( /warning t2$/.test(loglines[2]) )
+    assert.equal('end',loglines[3])
   }
-
 
 }
