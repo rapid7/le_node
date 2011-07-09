@@ -2,7 +2,6 @@
 module.exports = function(log,prefix) {
 
   var levels = log.levels
-  console.log(levels)
 
   var levelarr = []
 
