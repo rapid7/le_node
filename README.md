@@ -1,6 +1,8 @@
 
 ** under construction **
 
+READ AS PLAINTEXT (not markdown formatted yet)
+
 logentries.com
 
 to install:
