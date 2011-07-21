@@ -309,8 +309,3 @@ Copy the _accept/conf.js_ file to _accept/conf.mine.js_ and add your logentries.
 Company site: [logentries.com](http://logentries.com)
 
 
-## Hacking around with real time charts
-
-![](http://chartaca.com/point/adb6995d-b4b3-4edf-8892-11d1a232483d/s.gif)
-[Chartaca Hit Chart](http://chartaca.com/adb6995d-b4b3-4edf-8892-11d1a232483d) 
-
