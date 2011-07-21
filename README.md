@@ -284,9 +284,9 @@ object by using the _transport_ configuration option.
 
 If you are implementing your own transport object, you need to provide these interface methods:
 
-    * _queue( queue )_ : gives you an array to use as a queue, _Array.shift_ items off
-    * _consume()_ : process outstanding items in the queue by sending them to logentries.com
-    * _end()_ : (optional) close connection to logentries.com
+   * _queue( queue )_ : gives you an array to use as a queue, _Array.shift_ items off
+   * _consume()_ : process outstanding items in the queue by sending them to logentries.com
+   * _end()_ : (optional) close connection to logentries.com
 
 Take a look at the unit tests (in _test_ folder) to see some simple implementations.
 
