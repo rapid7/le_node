@@ -1,7 +1,6 @@
-
 # node-logentries
 
-** A Node.js wrapper for [logentries.com](http://twitter.com/rjrodger) **
+** A Node.js wrapper for [logentries.com](http://logentries.com) **
 
 If you're using this library, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
@@ -50,7 +49,7 @@ Core Methods:
    * _log( level_name, log_entry )_ : log entry at _level_name_
    * _on( event_name, callback )_ : listen for _error_ and _log_ events
    * _level( level_name )_ : discard entries below this level
-   * _winston( winston, options ) : register as a transport with winston
+   * _winston( winston, options )_ : register as a transport with winston
    * _end_ : close connection to logentries.com (unsent logs remain queued)
 
 
@@ -71,9 +70,9 @@ The node-logentries module does not depend on any non-core modules.
 ## Usage
 
 
-This module sends you logging enties to the logentries.com service. You will need an account with this service for the module to work.
+This module sends your logging entries to the logentries.com service. You will need an account with this service for the module to work.
 
-Once you have logentries.com account, you will need thre configuration items to initialize a logging instance (you can create more than one):
+Once you have logentries.com account, you will need three configuration items to initialize a logging instance (you can create more than one):
 
   * USER_KEY: as supplied by logentries.com
   * HOST_KEY: as supplied by logentries.com
@@ -107,13 +106,14 @@ var mylogger = require('node-logentries').logger({
 ```
 
 Each logger object is an instance of [EventEmitter](http://nodejs.org/docs/v0.4.10/api/events.html#events.EventEmitter). You can listen for the following events:
+
   * _log_: capture each log event (maybe for your own archive)
   * _error_: get notification of any errors in the logging system itself
 
 
 ## Conventions
 
-The standard syslog log levels are used by default: debug, info , notice, warning, err, crit , alert, emerg.    
+The standard syslog log levels are used by default: debug, info, notice, warning, err, crit , alert, emerg.    
 
 However, if installed as a winston transport (using the _winston_ method), then the winston levels are used: silly, verbose, info, warn, debug, error.
 
@@ -139,18 +139,18 @@ You should really also read the logentries.com documentation so that you underst
 
 When you create a _log_ object with the _logger_ function on the module, you can supply the following options:
 
-   * userkey:    required; logentries user key
-   * host:       required: logentries host
-   * log:        required; logentries log name
-   * transport:  optional; default is LogEntriesTransport; transport object
-   * levels:     optional; default is syslog-style; custom log levels
-   * printerror: optional; default is true; print errors to STDERR with console.error
+   * _userkey_:    required; logentries user key
+   * _host_:       required; logentries host
+   * _log_:        required; logentries log name
+   * _transport_:  optional; default is LogEntriesTransport; transport object
+   * _levels_:     optional; default is syslog-style; custom log levels
+   * _printerror_: optional; default is true; print errors to STDERR with console.error
 
-The userkey, host and log entries relate to your logentries.com configuration. The transport option allows you to 
+The _userkey_, _host_ and _log_ entries relate to your logentries.com configuration. The _transport_ option allows you to 
 provide an alternative transport implementation (see below). 
 
 By default the module will print errors to STDOUT to aid with debugging in a development context. To run this off,
-set the printerror option to false.
+set the _printerror_ option to false.
 
 The levels option lets you specify custom log levels. You provide these as a object, the property names of which are the
 log levels. The value of each log level should be an integer specifying its order. For example:
@@ -159,7 +159,7 @@ log levels. The value of each log level should be an integer specifying its orde
 
 
 
-### <loglevel>: `log.<logelevel>( entry )`
+### `<loglevel>`: `log.<logelevel>( entry )`
 
   * _entry_: (required) log entry, can be string or JSON object
 
@@ -193,7 +193,7 @@ This allows you to drop noisy debugging logs from production environments.
   * _event_: (required) one of _error_ or _log_
   * _callback_: (required) callback function
 
-This method is provided by the standard Node _EventEmitter_. Register callback functions to get notified on errors.
+This method is provided by the standard Node _EventEmitter_. Register callback functions to get notified of errors.
 The module cannot log errors itself, as it has nowhere to log them! Hosted environments may not provide writable disk access.
 Therefore, the module simply emits an error event that you can listen for. The module does also print errors to STDOUT by default,
 to help with debugging. Use the _printerror_ configuration setting to control this (see above).
@@ -233,7 +233,7 @@ are specified. The default rankings are:
       emerg     :7,
    }
 
-For example, if you specify a level of _warning_, then log enties at levels _debug_, _info_, and _notice_ will be dropped.
+For example, if you specify a level of _warning_, then log entries at levels _debug_, _info_, and _notice_ will be dropped.
 
     log.level('warning')
 
@@ -251,11 +251,13 @@ you. The winston log levels are automatically configured as the
 current log levels.
 
 There is an optional second argument to specify some integration options. At present this only lets you set the winston log level,
-(which is _info_ be default).
+(which is _info_ by default).
 
-var winston = require('winston')
-log.winston( winston, {level:'silly'} )
-
+    var winston = require('winston')
+    log.winston( winston, {level:'silly'} )
+   
+    // then use winston as normal
+    winston.info('And I thought you were so rugged!')
 
 With the winston API, you can specify a _meta_ parameter to a log
 entry. The node-logentries module converts this to a JSON string and
@@ -264,13 +266,13 @@ appends it to the log entry string.
 
 ### end: `log.end()`
 
-This module maintains an open HTTP connection to _api.logentries.com_, so that logging will be fast an efficient.
+This module maintains an open HTTP connection to _api.logentries.com_, so that logging will be fast and efficient.
 If the connection breaks, it is automatically reestablished.
 
 If you need to close the connection, call the end method. This primarily useful for unit testing to exit the test process.
 NOTE: if you submit further log entries after calling end, the connection will be reopened.
 
-If you need finer grained control, then you will need to write your own transport object, or extend the existing. See the _lib/logentries.js_ file.
+If you need finer grained control, then you will need to write your own transport object, or extend the existing one. See the _lib/logentries.js_ file.
 
 
 
@@ -281,6 +283,7 @@ data to logentries.com. You provide your own customized transport
 object by using the _transport_ configuration option.
 
 If you are implementing your own transport object, you need to provide these interface methods:
+
     * _queue( queue )_ : gives you an array to use as a queue, _Array.shift_ items off
     * _consume()_ : process outstanding items in the queue by sending them to logentries.com
     * _end()_ : (optional) close connection to logentries.com
@@ -292,10 +295,10 @@ Take a look at the unit tests (in _test_ folder) to see some simple implementati
 
 The unit tests use [expresso](https://github.com/visionmedia/expresso), and are in the _test_ folder.
 
-    npm install expresso
+    expresso test
 
 The acceptance tests (these push actual data to the live logentries.com service) are simple node scripts, and are in the _accept_ folder.
-Copy the _accept/conf.js_ to _accept/conf.mine.js_ and add your logentrires.com user keys. Run directly:
+Copy the _accept/conf.js_ file to _accept/conf.mine.js_ and add your logentries.com user keys. Run directly:
 
     node live.accept.js
 
