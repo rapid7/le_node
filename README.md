@@ -66,6 +66,8 @@ Or clone the git repository:
 
 The node-logentries module does not depend on any non-core modules.
 
+You also need a logentries.com account - [get started with logentries.com](https://logentries.com/docs/configure/#section9)
+
 
 ## Usage
 
