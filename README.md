@@ -147,6 +147,7 @@ When you create a _log_ object with the _logger_ function on the module, you can
    * _transport_:  optional; default is LogEntriesTransport; transport object
    * _levels_:     optional; default is syslog-style; custom log levels
    * _printerror_: optional; default is true; print errors to STDERR with console.error
+   * _timestamp_: optional; default is true; autogenerate a timestamp
 
 The _userkey_, _host_ and _log_ entries relate to your logentries.com configuration. The _transport_ option allows you to 
 provide an alternative transport implementation (see below). 
@@ -170,7 +171,7 @@ a connection will be opened, and any pending entries will be processed in order.
 
     log.info('buttered scones for tea')
 
-The log level and a timestamp are prefixed (in that order) to the log entry, and will be present in the logentries.com console.
+The log level and an optional timestamp are prefixed (in that order) to the log entry, and will be present in the logentries.com console.
 
 The <loglevel> convenience methods are dynamically constructed from the configured list of logging levels, a method being constructed for each level,
 having the name of the level. If you're naughty and use log levels like 'log' and 'level', they will be ignored.
