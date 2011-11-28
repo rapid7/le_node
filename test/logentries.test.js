@@ -30,7 +30,12 @@ function SimpleTestTransport( expect ) {
     while( 0 < queue.length ) {
       var entry = queue.shift()
       var check = expect[index]
-      check.unshift('date')
+      
+      // Is options.timestamp === true?
+      if ( entry.length > 2 ) {
+        check.unshift('date')
+      }
+      
       //console.log(check,entry)
       assert.ok( arreq(1,check,entry) )
       index++
@@ -132,7 +137,7 @@ module.exports = {
 
     log.info('t1')
     t.ok()
-
+    
     log = logentries.logger({levels:{foo:0,bar:1},transport:t=new SimpleTestTransport([
       ['foo','t1'],
       ['bar','t2']
@@ -170,6 +175,14 @@ module.exports = {
     catch(e) {
       assert.equal("unknown log level: bogus",e.message)
     }
+    
+    log2 = logentries.logger({
+      timestamp: false,
+      transport:t=new SimpleTestTransport([['info','t1']
+    ])})
+    
+    log2.info('t1')
+    t.ok()
   },
 
 
@@ -223,7 +236,6 @@ module.exports = {
     t.ok()
   },
 
-  
   events: function() {
     var t = null
     var d = new Date()
