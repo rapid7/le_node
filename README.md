@@ -18,9 +18,7 @@ This module is also completely compatible with [winston](https://github.com/inde
 var logentries = require('node-logentries')
 
 var log = logentries.logger({
-  userkey:'YOUR_USER_KEY',
-  host:'YOUR_HOST',
-  log:'YOUR_LOG_NAME'
+  token:'YOUR_TOKEN'
 })
 
 // level specific methods like 'info', 'debug', etc.
@@ -74,11 +72,9 @@ You also need a logentries.com account - [get started with logentries.com](https
 
 This module sends your logging entries to the logentries.com service. You will need an account with this service for the module to work.
 
-Once you have logentries.com account, you will need three configuration items to initialize a logging instance (you can create more than one):
+Once you have logentries.com account, you need just one configuration item to initialize a logging instance (you can create more than one):
 
-  * USER_KEY: as supplied by logentries.com
-  * HOST_KEY: as supplied by logentries.com
-  * LOG_NAME: either the name of an existing log on logentries.com, or an entirely new name (which will be dynamically created).
+  * TOKEN: As supplied by Logentries when you create a logfile of source type Token TCP.
 
 The module provides you with a set of logging methods that correspond to the standard syslog log levels. These are, in order of increasing severity:
 
@@ -127,9 +123,7 @@ For the API examples, assume the following lines of code at the top of your sour
     var logentries = require('node-logentries')
 
     var log = logentries.logger({
-      userkey:'YOUR_USER_KEY',
-      host:'YOUR_HOST',
-      log:'YOUR_LOG_NAME'
+      token:'YOUR_TOKEN'
     })
 
 This gives you a standard _log_ object.
@@ -141,15 +135,13 @@ You should really also read the logentries.com documentation so that you underst
 
 When you create a _log_ object with the _logger_ function on the module, you can supply the following options:
 
-   * _userkey_:    required; logentries user key
-   * _host_:       required; logentries host
-   * _log_:        required; logentries log name
+   * _token_:    required; logentries destination token uuid
    * _transport_:  optional; default is LogEntriesTransport; transport object
    * _levels_:     optional; default is syslog-style; custom log levels
    * _printerror_: optional; default is true; print errors to STDERR with console.error
    * _timestamp_: optional; default is true; autogenerate a timestamp
 
-The _userkey_, _host_ and _log_ entries relate to your logentries.com configuration. The _transport_ option allows you to 
+The _token_  entry relates to your logentries.com configuration. The _transport_ option allows you to 
 provide an alternative transport implementation (see below). 
 
 By default the module will print errors to STDOUT to aid with debugging in a development context. To run this off,
