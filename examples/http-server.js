@@ -2,9 +2,7 @@
 var logentries = require('node-logentries')
 
 var log = logentries.logger({
-  userkey:'YOUR_USER_KEY',
-  host:'YOUR_HOST',
-  log:'YOUR_LOG_NAME'
+  token:'YOUR_TOKEN'
 })
 
 log.on('error',function(err){
