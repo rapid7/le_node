@@ -15,6 +15,11 @@
     "lib": "lib"
   },
   "repository": { "type" : "git", "url" : "https://github.com/rjrodger/node-logentries.git" },
+  "files":[
+    "package.json",
+    "README.md",
+    "lib/logentries.js" 
+  ],
   "engines": {
     "node": "*"
   }
