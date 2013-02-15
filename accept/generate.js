@@ -13,6 +13,7 @@ module.exports = function(log,prefix) {
     if( i < 10 ) {
       var lev = levelarr[Math.floor(Math.random()*levelarr.length)]
       var datastr = prefix+i
+      console.log(datastr)
       log.log(lev,datastr)
 
       setTimeout(function(){
@@ -20,6 +21,7 @@ module.exports = function(log,prefix) {
       },500*Math.random())
     }
     else {
+      console.log('end')
       log.end()
     }
   }

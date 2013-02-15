@@ -288,9 +288,9 @@ Take a look at the unit tests (in _test_ folder) to see some simple implementati
 
 ## Testing
 
-The unit tests use [expresso](https://github.com/visionmedia/expresso), and are in the _test_ folder.
+The unit tests use [mocha](http://visionmedia.github.com/mocha/), and are in the _test_ folder.
 
-    expresso test
+    mocha test/logentries.test.js
 
 The acceptance tests (these push actual data to the live logentries.com service) are simple node scripts, and are in the _accept_ folder.
 Copy the _accept/conf.js_ file to _accept/conf.mine.js_ and add your logentries.com user keys. Run directly:

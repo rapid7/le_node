@@ -1,3 +1,8 @@
+/* Copyright (c) 2011-2013 Richard Rodger, BSD License */
+"use strict";
+
+// mocha logentries.test.js
+
 
 var logentries = require('../lib/logentries')
 
@@ -126,9 +131,9 @@ function EventingTransport() {
 }
 
 
-module.exports = {
+describe('logentries',function(){
 
-  levels: function() {
+  it('levels', function() {
     var t = null
 
     var log = logentries.logger({transport:t=new SimpleTestTransport([
@@ -176,17 +181,17 @@ module.exports = {
       assert.equal("unknown log level: bogus",e.message)
     }
     
-    log2 = logentries.logger({
+    var log2 = logentries.logger({
       timestamp: false,
       transport:t=new SimpleTestTransport([['info','t1']
     ])})
     
     log2.info('t1')
     t.ok()
-  },
+  })
 
 
-  connecting: function() {
+  it('connecting', function() {
     var t = null
 
     var expect = []
@@ -208,10 +213,11 @@ module.exports = {
       }
     }
     logit(0)
-  },
+  })
+
 
   
-  vartypes: function() {
+  it('vartypes', function() {
     var t = null
     var d = new Date()
 
@@ -234,9 +240,11 @@ module.exports = {
     log.info(['a','b'])
 
     t.ok()
-  },
+  })
 
-  events: function() {
+
+
+  it('events', function() {
     var t = null
     var d = new Date()
 
@@ -275,6 +283,6 @@ module.exports = {
     assert.ok( /info t1$/.test(loglines[1]) )
     assert.ok( /warning t2$/.test(loglines[2]) )
     assert.equal('end',loglines[3])
-  }
+  })
 
-}
+})
