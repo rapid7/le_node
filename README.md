@@ -285,6 +285,10 @@ If you are implementing your own transport object, you need to provide these int
 
 Take a look at the unit tests (in _test_ folder) to see some simple implementations.
 
+## Streaming interface
+
+An alternative to the standard inteface is the streaming interface.
+most modules that can output to a file can now output to logentries using the stream interface.
 
 ## Testing
 
