@@ -293,7 +293,7 @@ The unit tests use [mocha](http://visionmedia.github.com/mocha/), and are in the
     mocha test/logentries.test.js
 
 The acceptance tests (these push actual data to the live logentries.com service) are simple node scripts, and are in the _accept_ folder.
-Copy the _accept/conf.js_ file to _accept/conf.mine.js_ and add your logentries.com user keys. Run directly:
+Copy the _accept/conf.js_ file to _accept/conf.mine.js_ and add the token for your log file. Run directly:
 
     node live.accept.js
 
