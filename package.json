@@ -6,7 +6,8 @@
   "homepage": "https://github.com/rjrodger/node-logentries",
   "author": "Richard Rodger <richard@ricebridge.com> (http://richardrodger.com/)",
   "contributors": [
-    "Richard Rodger <richard@ricebridge.com> (http://richardrodger.com/)"
+    "Richard Rodger (http://richardrodger.com)",
+    "Mark Lacomber  (https://github.com/MarkLC)"
   ],
   "dependencies": {
   },
