@@ -10,7 +10,6 @@ var startTime = Date.now();
 var endtime = startTime + 20000;
 
 generate(log,'live')
-generate(log,'live')
 
 function activeHandles() {
 	var numActiveHandles = process._getActiveHandles().length;
