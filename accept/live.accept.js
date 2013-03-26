@@ -24,4 +24,7 @@ function activeHandles() {
 		setTimeout(activeHandles, 1000)
 	}
 }
-setTimeout(activeHandles, 1000);
+
+if (process._getActiveHandles) {
+	setTimeout(activeHandles, 1000);
+}

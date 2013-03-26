@@ -136,6 +136,7 @@ You should really also read the logentries.com documentation so that you underst
 When you create a _log_ object with the _logger_ function on the module, you can supply the following options:
 
    * _token_:    required; logentries destination token uuid
+   * _secure_:     optional; default is false; use tls for communication
    * _transport_:  optional; default is LogEntriesTransport; transport object
    * _levels_:     optional; default is syslog-style; custom log levels
    * _printerror_: optional; default is true; print errors to STDERR with console.error
