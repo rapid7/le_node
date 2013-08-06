@@ -14,7 +14,7 @@ generate(log,'live')
 function activeHandles() {
 	var numActiveHandles = process._getActiveHandles().length;
 	if (numActiveHandles === 1) {
-		console.log("Only handle monitoring handes left. Everything is OK.")
+		console.log("Only handle monitoring handles left. Everything is OK.")
 		process.exit(0)
 	} else if (Date.now() > endtime) {
 		console.log("Looks like process is not going to end naturally. Something is keeping it alive.")

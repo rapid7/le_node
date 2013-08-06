@@ -18,7 +18,7 @@ module.exports = function(log,prefix) {
 
       setTimeout(function(){
         entry(i+1)
-      },500*Math.random())
+      }, Math.floor(500*Math.random()))
     }
     else {
       console.log('end')
