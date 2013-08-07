@@ -9,7 +9,7 @@ var generate = require('./generate.js')
 var startTime = Date.now();
 var endtime = startTime + 20000;
 
-generate(log,'live')
+generate(log,'live with space')
 
 function activeHandles() {
 	var numActiveHandles = process._getActiveHandles().length;

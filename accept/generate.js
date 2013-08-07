@@ -18,10 +18,11 @@ module.exports = function(log,prefix) {
         "booleanField": true,
         "numberField": 25,
         "nested": {
-          "nested-name": "some nested name"
+          "nested_name": "some nested name",
+          "nested_array": ["zero", true, 2 ]
         },
         "array": [
-          { "array-field-1": "value"},
+          { "array_field_0": "value"},
           "test",
           2
         ]
