@@ -227,8 +227,8 @@ describe('logentries',function(){
       ['info','str'],
       ['info',d.toISOString()],
       ['info','function (){return "fn"}'],
-      ['info','{"a":"1","b":"2"}'],
-      ['info','["a","b"]'],
+      ['info','a=1 b=2 '],
+      ['info','0=a 1=b '],
     ])})
 
     log.info(true)
