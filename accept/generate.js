@@ -17,6 +17,7 @@ module.exports = function(log,prefix) {
         "name": datastr,
         "booleanField": true,
         "numberField": 25,
+        "nullValue": null,
         "nested": {
           "nested_name": "some nested name",
           "nested_array": ["zero", true, 2 ]
@@ -24,7 +25,9 @@ module.exports = function(log,prefix) {
         "array": [
           { "array_field_0": "value"},
           "test",
-          2
+          2,
+          null,
+          undefined
         ]
       }
       console.log(datastr)
