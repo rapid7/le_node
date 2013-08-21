@@ -42,7 +42,7 @@ function SimpleTestTransport( expect ) {
       }
       
       //console.log(check,entry)
-      assert.ok( arreq(1,check,entry) )
+      assert.ok( arreq(1,check,entry), "Expected: '" + check + "'. Actual: '" + entry + "'" )
       index++
     }
   }
@@ -229,6 +229,12 @@ describe('logentries',function(){
       ['info','function (){return "fn"}'],
       ['info','a=1 b=2 '],
       ['info','0=a 1=b '],
+      ['info','null'],
+      ['info','a=null '],
+      ['info',''],
+      ['info','a.0=null '],
+      ['info','undefined'],
+      ['info','false']
     ])})
 
     log.info(true)
@@ -238,7 +244,12 @@ describe('logentries',function(){
     log.info(function(){return "fn"})
     log.info({a:'1',b:'2'})
     log.info(['a','b'])
-
+    log.info(null)
+    log.info({a:null})
+    log.info({a: []})
+    log.info({a: [null]})
+    log.info(undefined)
+    log.info(false)
     t.ok()
   })
 
