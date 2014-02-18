@@ -4,7 +4,7 @@
 
 If you're using this library, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
-Current Version: 0.1.1
+Current Version: 0.1.3
 
 Tested on: node 0.4.9
 
@@ -30,6 +30,9 @@ log.log("debug", {sleep:"all night", work:"all day"})
 // use as a winston transport
 var winston = require('winston')
 log.winston( winston )
+
+// specify custom levels when using as winston transport
+log.winston( winston, { level: 'silly', levels: { silly: 0, info: 1, error: 2} })
 
 ```
 

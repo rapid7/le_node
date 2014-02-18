@@ -2,7 +2,7 @@
   "name": "node-logentries",
   "description": "A winston-compatible wrapper library for the logentries.com service",
   "keywords": ["log", "logging", "winston", "logentries", "logentries.com", "wrapper","api"],
-  "version": "0.1.1",
+  "version": "0.1.3",
   "homepage": "https://github.com/rjrodger/node-logentries",
   "author": "Richard Rodger <richard@ricebridge.com> (http://richardrodger.com/)",
   "contributors": [
