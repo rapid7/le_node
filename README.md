@@ -309,3 +309,7 @@ Copy the _accept/conf.js_ file to _accept/conf.mine.js_ and add the token for yo
 Company site: [logentries.com](http://logentries.com)
 
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rjrodger/node-logentries/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
