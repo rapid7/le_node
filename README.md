@@ -145,6 +145,7 @@ When you create a _log_ object with the _logger_ function on the module, you can
    * _printerror_: optional; default is true; print errors to STDERR with console.error
    * _timestamp_: optional; default is true; autogenerate a timestamp
    * _usequotes_: optional; default is false; add double quotes around every field
+   * _printlevel_: optional; default is true; print log level to log (e.g. "info ~~~~~~")
 
 The _token_  entry relates to your logentries.com configuration. The _transport_ option allows you to 
 provide an alternative transport implementation (see below). 
