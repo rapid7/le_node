@@ -1,4 +1,4 @@
-var http=require('http'), le=require('../lib/logentries3.js');
+var http=require('http'), le=require('../lib/logentries.js');
 
 var leToken='1ed3e842-b5a1-4a8d-9783-0f266e7a6a4d', log=le.logger({token:leToken});
 
