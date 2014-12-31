@@ -1,6 +1,6 @@
-var winston=require('winston'), le=require('../lib/logentries.js');
+var winston=require('winston'), le=require('../lib/logentries.js'); // le=require('node-logentries')
 
-var leToken='1ed3e842-b5a1-4a8d-9783-0f266e7a6a4d', leLog=le.logger({token:leToken});
+var leToken='YOUR_LE_TOKEN', leLog=le.logger({token:leToken});
 
 leLog.winston(winston);
 
