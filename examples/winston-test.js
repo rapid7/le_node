@@ -11,8 +11,6 @@ var logger = new winston.Logger({
   ]
 });
 
-//logger.transports.console.level('silly');
-
 logger.log('silly','SILLY Howdy..');
 logger.log('debug','DEBUG Howdy..');
 logger.log('verbose','VERBOSE Howdy..');
