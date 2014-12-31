@@ -13,7 +13,8 @@ http.createServer(function(req, res){
     log.notice('NOTE b="xyz"',1,2,3);
     log.warning('WARN c:Hello','there');
     log.err('ERROR blah..');
-    log.log("debug", {a:1, b:'two'});
+    log.log('debug', {a:1, b:'two'});
+    log.log('crap', 'hello');
   }
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('Simple log messages sent to LE Token '+leToken+'\n');
