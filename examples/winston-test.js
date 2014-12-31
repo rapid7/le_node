@@ -17,6 +17,6 @@ logger.log('silly','SILLY Howdy..');
 logger.log('debug','DEBUG Howdy..');
 logger.log('verbose','VERBOSE Howdy..');
 logger.log('info','INFO Howdy..');
-logger.log('warn','WARN Howdy..',['big','feckin','deal']);
+logger.log('warn','WARN Howdy..',['what','about','arrays']);
 logger.log('error','ERROR Howdy %s %s','template','string',{a:1,b:2},function(){ console.log('Why (TF) would I want to do this?') });
 logger.log('Whatever...'); // Nada..?
