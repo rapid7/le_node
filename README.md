@@ -43,12 +43,14 @@ Core Methods:
 
 ## Installation
 
+```javascript
 npm install node-logentries
-
+```
 And in your code:
 
+```javascript
 var logentries = require('node-logentries')
-
+```
 Or clone the git repository:
 git clone git://github.com/rjrodger/node-logentries.git
 
