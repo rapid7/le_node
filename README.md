@@ -84,7 +84,8 @@ a general logging method, _log_, that takes the name of the log level as the fir
 
 To create a logging instance, call the _logger_ function of the module, passing any options as the first argument:
 
-    var mylogger = require('node-logentries').logger({ levels: { chill:0, meh:1, hmm:2, notgood:3, ohnoes:4, omgwtfbbq:5 } })
+    var le = require('node-logentries');
+    le.logger({ levels: { chill:0, meh:1, hmm:2, notgood:3, ohnoes:4, omgwtfbbq:5 } })
 
 Each logger object is an instance of [EventEmitter](http://nodejs.org/docs/v0.4.10/api/events.html#events.EventEmitter). You can listen for the following events:
 
@@ -102,11 +103,11 @@ However, if installed as a winston transport (using the _winston_ method), then 
 
 For the API examples, assume the following lines of code at the top of your source code file:
 
-var logentries = require('node-logentries')
+    var logentries = require('node-logentries')
 
-var log = logentries.logger({
-token:'YOUR_TOKEN'
-})
+    var log = logentries.logger({
+    token:'YOUR_TOKEN'
+    })
 
 This gives you a standard _log_ object.
 
