@@ -43,14 +43,12 @@ Core Methods:
 
 ## Installation
 
-```javascript
-npm install node-logentries
-```
+    npm install node-logentries
+
 And in your code:
 
-```javascript
-var logentries = require('node-logentries')
-```
+    var logentries = require('node-logentries')
+
 Or clone the git repository:
 git clone git://github.com/rjrodger/node-logentries.git
 
@@ -86,13 +84,7 @@ a general logging method, _log_, that takes the name of the log level as the fir
 
 To create a logging instance, call the _logger_ function of the module, passing any options as the first argument:
 
-```
-var mylogger = require('node-logentries').logger({
-levels: {
-chill:0, meh:1, hmm:2, notgood:3, ohnoes:4, omgwtfbbq:5
-}
-})
-```
+    var mylogger = require('node-logentries').logger({ levels: { chill:0, meh:1, hmm:2, notgood:3, ohnoes:4, omgwtfbbq:5 } })
 
 Each logger object is an instance of [EventEmitter](http://nodejs.org/docs/v0.4.10/api/events.html#events.EventEmitter). You can listen for the following events:
 
@@ -136,7 +128,7 @@ provide an alternative transport implementation (see below).
 The levels option lets you specify custom log levels. You provide these as a object, the property names of which are the
 log levels. The value of each log level should be an integer specifying its order. For example:
 
-{ lowest:0, lower:1, middle:2, higher:3, highest:4 }
+    { lowest:0, lower:1, middle:2, higher:3, highest:4 }
 
 
 ### `<loglevel>`: `log.<logelevel>( entry )`
@@ -159,7 +151,7 @@ The <loglevel> convenience methods are dynamically constructed from the configur
 Submit a log entry, passing the name of the level programmatically. The dynamically constructed convenience methods, 
 such as _debug_, delegate to this method internally.
 
-log.log('debug','press wild flowers')
+    log.log('debug','press wild flowers')
 
 A log entry will only be submitted if the log level is greater than or equal to the current log level setting of the logger. This allows you to drop noisy debugging logs from production environments.
 
@@ -173,15 +165,15 @@ This method is provided by the standard Node _EventEmitter_. Register callback f
 The module cannot log errors itself, as it has nowhere to log them! Hosted environments may not provide writable disk access.
 Therefore, the module simply emits an error event that you can listen for. The module does also print errors to STDOUT by default, to help with debugging. Use the _printerror_ configuration setting to control this (see above).
 
-log.on('error',function(err){
-console.log('hangs around.... In bars!? '+err )
-}
+    log.on('error',function(err){
+      console.log('hangs around.... In bars!? '+err )
+    }
 
 You may also need to gain access to the verbatim log lines. You can listen to the _log_ event to do this:
 
-log.on('log',function(logline){
-console.log( logline )
-}
+    log.on('log',function(logline){
+      console.log( logline )
+    }
 
 ### level: `log.level(name)`
 
@@ -191,16 +183,16 @@ Set the current log level. All log entries below this level will be ignored. All
 are specified. The default rankings are:
 
 
-{
-debug     :0,
-info      :1,
-notice    :2,
-warning   :3,
-err       :4,
-crit      :5,
-alert     :6,
-emerg     :7,
-}
+    {
+      debug     :0,
+      info      :1,
+      notice    :2,
+      warning   :3,
+      err       :4,
+      crit      :5,
+      alert     :6,
+      emerg     :7
+    }
 
 For example, if you specify a level of _warning_, then log entries at levels _debug_, _info_, and _notice_ will be dropped.
 
@@ -222,11 +214,11 @@ current log levels.
 There is an optional second argument to specify some integration options. At present this only lets you set the winston log level,
 (which is _info_ by default).
 
-var winston = require('winston')
-log.winston( winston, {level:'silly'} )
+    var winston = require('winston')
+    log.winston( winston, {level:'silly'} )
 
-// then use winston as normal
-winston.info('And I thought you were so rugged!')
+    // then use winston as normal
+    winston.info('And I thought you were so rugged!')
 
 With the winston API, you can specify a _meta_ parameter to a log
 entry. The node-logentries module converts this to a JSON string and
@@ -243,4 +235,4 @@ If you need to close the connection, call the end method. This primarily useful 
 
 The unit tests use [mocha](http://visionmedia.github.com/mocha/), and are in the _test_ folder.
 
-mocha test/logger.test.js
+    mocha test/logger.test.js
