@@ -1,5 +1,6 @@
+// To run Tests, from module root directory, type "mocha"
 var assert = require('assert'), le = require('../lib/logentries.js'); // le=require('node-logentries')
-var myToken = '1ed3e842-b5a1-4a8d-9783-0f266e7a6a4d';
+var myToken = 'YOUR_TOKEN';
 var logger = le.logger({ token: myToken });
 var errs=[], lines=[];
 
