@@ -24,7 +24,7 @@ function logStuff(){
   logger.notice('NOTICE - Deeper object',{ a:1, b:{ c:2, d:[ {a:1, b:2}, {c:1, d:2} ] } });
   logger.crit('CRITICAL - message that could not be delivered without having a .crit() function..?');
   logger.alert('ALERT - Very different from CRIT');
-  logger.emerg('EMERGENCY -The top level of custom log food chain.. Mmm...');
+  logger.emerg({ "A": "Pure JSON object", "B": "that should deliver as JSON to leWeb", "C": "in theory" });
   //log.crap("CRAP - this should throw an error and exit");
   logger.log('crap', 'this should generate a logger error');
 }
