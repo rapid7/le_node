@@ -1,6 +1,6 @@
 // Test logentries log service. You must insert your logentries token below !
 
-var le=require('../lib/logentries.js'); // le=require('node-logentries')
+var le = require('../lib/logentries.js'); // le=require('node-logentries')
 var logger = le.logger({ token: 'YOUR_TOKEN' });
 
 logger.on('error',function(err){

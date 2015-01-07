@@ -6,7 +6,7 @@ A simple [winston](https://github.com/indexzero/winston) compatible module for l
 var logentries = require('node-logentries')
 
 var log = logentries.logger({
-token:'YOUR_TOKEN'
+  token:'YOUR_TOKEN'
 })
 
 // level specific methods like 'info', 'debug', etc.

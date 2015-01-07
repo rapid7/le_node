@@ -2,7 +2,7 @@
 
 var winston=require('winston'), le=require('../lib/logentries.js'); // le=require('node-logentries')
 
-var leToken='YOUR_LE_TOKEN', leLog=le.logger({token:leToken});
+var leLog = le.logger({ token: 'YOUR_LE_TOKEN' });
 
 leLog.winston(winston);
 
