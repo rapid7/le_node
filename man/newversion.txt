@@ -1,5 +1,0 @@
-edit package.json
-git tag x.y.z
-git push --tags
-cd ..
-sh node-logentries/man/makepackage.sh
