@@ -104,10 +104,7 @@ However, if installed as a winston transport (using the _winston_ method), then 
 For the API examples, assume the following lines of code at the top of your source code file:
 
     var logentries = require('node-logentries')
-
-    var log = logentries.logger({
-    token:'YOUR_TOKEN'
-    })
+    var log = logentries.logger({ token:'YOUR_TOKEN' })
 
 This gives you a standard _log_ object.
 
@@ -144,7 +141,7 @@ The log level and an optional timestamp are prefixed to the log entry, and will 
 
 The <loglevel> convenience methods are dynamically constructed from the configured list of logging levels, a method being constructed for each level, having the name of the level. If you use invalid log levels like 'log', 'level', 'on' or 'end', they will be ignored.
 
-### log: `log.log(level,entry)`
+### `log.log(level,entry)`
 
 * _level_: (required) the name of the log level (must match one of the configured levels)
 * _entry_: (required) log entry, can be string or JSON object
@@ -157,7 +154,7 @@ such as _debug_, delegate to this method internally.
 A log entry will only be submitted if the log level is greater than or equal to the current log level setting of the logger. This allows you to drop noisy debugging logs from production environments.
 
 
-### on: `log.on(event,callback)`
+### `log.on(event,callback)`
 
 * _event_: (required) one of _error_ or _log_
 * _callback_: (required) callback function
@@ -176,7 +173,7 @@ You may also need to gain access to the verbatim log lines. You can listen to th
       console.log( logline )
     }
 
-### level: `log.level(name)`
+### `log.level(name)`
 
 * _name_: (required) the name of the level
 
@@ -197,7 +194,7 @@ are specified. The default rankings are:
 
 For example, if you specify a level of _warning_, then log entries at levels _debug_, _info_, and _notice_ will be dropped.
 
-log.level('warning')
+    log.level('warning')
 
 
 ### winston: `log.winston( winston, options )`
@@ -226,7 +223,7 @@ entry. The node-logentries module converts this to a JSON string and
 appends it to the log entry string.
 
 
-### end: `log.end()`
+### `log.end()`
 
 This module maintains an open HTTP connection to _api.logentries.com_, so that logging will be fast and efficient.
 
