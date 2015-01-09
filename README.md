@@ -32,12 +32,12 @@ A ([winston](https://github.com/indexzero/winston) compatible) Node.js module fo
 
 Core Methods:
 
-* __{debug,info,...}( log_entry ) :__ log entry at _debug,info,..._ level (configurable)   
-* __log( level_name, log_entry ) :__ log entry at _level_name_
-* __on( event_name, callback ) :__ listen for logger events
-* __level( level_name ) :__ discard entries below this level
-* __winston( winston, options ) :__ register as a transport with winston
-* __end :__ close connection to logentries.com (unsent logs remain queued)
+* __{debug,info,...}(log_entry) :__ log entry at _debug,info,..._ level (configurable)   
+* __log(level_name, log_entry) :__ log entry at _level_name_
+* __on(event_name, callback) :__ listen for logger events
+* __level(level_name) :__ discard entries below this level
+* __winston(winston, options) :__ register as a transport with winston
+* __end() :__ close connection to logentries.com (unsent logs remain queued)
 
 
 ## Installation
