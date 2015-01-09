@@ -141,8 +141,9 @@ log levels. The value of each log level should be an integer specifying its orde
 
 Submit a log entry. The entry data will be submitted to logentries.com. If a logging connection to logentries.com is not open, a connection will be opened, and any pending entries will be processed in order.
 
-log.info('buttered scones for tea')
-
+```javascript
+    log.info('buttered scones for tea')
+```
 The log level and an optional timestamp are prefixed to the log entry, and will be present in the logentries.com console.
 
 The <loglevel> convenience methods are dynamically constructed from the configured list of logging levels, a method being constructed for each level, having the name of the level. If you use invalid log levels like 'log', 'level', 'on' or 'end', they will be ignored.
@@ -155,8 +156,9 @@ The <loglevel> convenience methods are dynamically constructed from the configur
 Submit a log entry, passing the name of the level programmatically. The dynamically constructed convenience methods, 
 such as _debug_, delegate to this method internally.
 
+```javascript
     log.log('debug','press wild flowers')
-
+```
 A log entry will only be submitted if the log level is greater than or equal to the current log level setting of the logger. This allows you to drop noisy debugging logs from production environments.
 
 
@@ -204,8 +206,9 @@ are specified. The default rankings are:
 ```
 For example, if you specify a level of _warning_, then log entries at levels _debug_, _info_, and _notice_ will be dropped.
 
+```javascript
     log.level('warning')
-
+```
 
 ### winston: `log.winston( winston, options )`
 
@@ -244,4 +247,6 @@ If you need to close the connection, call the end method. This primarily useful 
 
 The unit tests use [mocha](http://visionmedia.github.com/mocha/), and are in the _test_ folder.
 
-    mocha test/logger.test.js
+```javascript
+    mocha test/le_node.test.js
+```
