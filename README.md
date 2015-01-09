@@ -89,7 +89,7 @@ To create a logging instance, call the _logger_ function of the module, passing 
 
 Each logger object is an instance of [EventEmitter](http://nodejs.org/docs/v0.4.10/api/events.html#events.EventEmitter). You can listen for the following events:
 
-* _connect_: notification of sucessful connection to Logentries service
+* __connect :__ notification of sucessful connection to Logentries service
 * _error_: notification of any errors in the logging system itself
 * _log_: capture each log event (maybe for your own archive)
 * _close_: notification of socket Close event (disconnection from Logentries service, automatic reconnect will be attempted)
