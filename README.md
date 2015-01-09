@@ -35,7 +35,7 @@ Core Methods:
 
 * _{debug,info,...}( log_entry )_ : log entry at _debug,info,..._ level (configurable)   
 * _log( level_name, log_entry )_ : log entry at _level_name_
-* _on( event_name, callback )_ : listen for _error_ and _log_ events
+* _on( event_name, callback )_ : listen for logger events
 * _level( level_name )_ : discard entries below this level
 * _winston( winston, options )_ : register as a transport with winston
 * _end_ : close connection to logentries.com (unsent logs remain queued)
@@ -89,8 +89,11 @@ To create a logging instance, call the _logger_ function of the module, passing 
 
 Each logger object is an instance of [EventEmitter](http://nodejs.org/docs/v0.4.10/api/events.html#events.EventEmitter). You can listen for the following events:
 
+* _connect_: notification of sucessful connection to Logentries service
+* _error_: notification of any errors in the logging system itself
 * _log_: capture each log event (maybe for your own archive)
-* _error_: get notification of any errors in the logging system itself
+* _close_: notification of socket Close event (disconnection from Logentries service, automatic reconnect will be attempted)
+* _end_: notification of socket End event (usually after you invoke logger.end())
 
 
 ## Conventions
