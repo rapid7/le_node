@@ -1,6 +1,6 @@
 # node-logentries
 
-A [winston](https://github.com/indexzero/winston) compatible Node.js module for logging directly to your [logentries.com](http://logentries.com) account.
+A ([winston](https://github.com/indexzero/winston) compatible) Node.js module for logging directly to your [logentries.com](http://logentries.com) account.
 
 ```javascript
 var logentries = require('node-logentries')
