@@ -52,7 +52,7 @@ And in your code:
     var logentries = require('le_node')
 ```
 Or clone the git repository:
-git clone git://github.com/rjrodger/le_node.git
+git clone git://github.com/logentries/le_node.git
 
 The le_node module does not depend on any non-core modules.
 
