@@ -163,6 +163,13 @@ such as _debug_, delegate to this method internally.
 ```
 A log entry will only be submitted if the log level is greater than or equal to the current log level setting of the logger. This allows you to drop noisy debugging logs from production environments.
 
+If the only element passed to logger is a pure Javascript object, eg.
+
+```javascript
+        log.info({ a:1, b:2, c:3 })
+```
+then the level name (and optional timestamp) will be added to the object rather than prepended as strings.
+This enables leWeb interface to present structured JSON, in place of simple text.
 
 ### `log.on(event,callback)`
 
