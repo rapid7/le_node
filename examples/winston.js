@@ -1,6 +1,6 @@
 // Test logentries log service as transport in winston
 
-var winston=require('winston'), le=require('../lib/logentries.js'); // le=require('node-logentries')
+var winston=require('winston'), le=require('../lib/le_node.js'); // le=require('le_node')
 
 var leLog = le.logger({ token: 'YOUR_LE_TOKEN' });
 

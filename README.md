@@ -1,27 +1,26 @@
-# node-logentries
+# le_node
 
 A ([winston](https://github.com/indexzero/winston) compatible) Node.js module for logging directly to your [logentries.com](http://logentries.com) account.
 
 ```javascript
-var logentries = require('node-logentries')
+    var logentries = require('le_node')
 
-var log = logentries.logger({
-  token:'YOUR_TOKEN'
-})
+    var log = logentries.logger({
+      token:'YOUR_TOKEN'
+    })
 
-// level specific methods like 'info', 'debug', etc.
-log.info("I'm a Lumberjack and I'm OK")
+    // level specific methods like 'info', 'debug', etc.
+    log.info("I'm a Lumberjack and I'm OK")
 
-// generic log method, also accepts JSON entries
-log.log("debug", {sleep:"all night", work:"all day"})
+    // generic log method, also accepts JSON entries
+    log.log("debug", {sleep:"all night", work:"all day"})
 
-// use as a winston transport
-var winston = require('winston')
-log.winston( winston )
+    // use as a winston transport
+    var winston = require('winston')
+    log.winston( winston )
 
-// specify custom levels when using as winston transport
-log.winston( winston, { level: 'silly', levels: { silly: 0, info: 1, error: 2} })
-
+    // specify custom levels when using as winston transport
+    log.winston( winston, { level: 'silly', levels: { silly: 0, info: 1, error: 2} })
 ```
 
 # Key Features:
@@ -33,26 +32,27 @@ log.winston( winston, { level: 'silly', levels: { silly: 0, info: 1, error: 2} }
 
 Core Methods:
 
-* _{debug,info,...}( log_entry )_ : log entry at _debug,info,..._ level (configurable)   
-* _log( level_name, log_entry )_ : log entry at _level_name_
-* _on( event_name, callback )_ : listen for logger events
-* _level( level_name )_ : discard entries below this level
-* _winston( winston, options )_ : register as a transport with winston
-* _end_ : close connection to logentries.com (unsent logs remain queued)
+* __{debug,info,...}( log_entry ) :__ log entry at _debug,info,..._ level (configurable)   
+* __log( level_name, log_entry ) :__ log entry at _level_name_
+* __on( event_name, callback ) :__ listen for logger events
+* __level( level_name ) :__ discard entries below this level
+* __winston( winston, options ) :__ register as a transport with winston
+* __end :__ close connection to logentries.com (unsent logs remain queued)
 
 
 ## Installation
 
-    npm install node-logentries
+    npm install le_node
 
 And in your code:
 
-    var logentries = require('node-logentries')
-
+```javascript
+    var logentries = require('le_node')
+```
 Or clone the git repository:
-git clone git://github.com/rjrodger/node-logentries.git
+git clone git://github.com/rjrodger/le_node.git
 
-The node-logentries module does not depend on any non-core modules.
+The le_node module does not depend on any non-core modules.
 
 You also need a logentries.com account - [get started with logentries.com](https://logentries.com/docs/configure/#section9)
 
@@ -84,9 +84,10 @@ a general logging method, _log_, that takes the name of the log level as the fir
 
 To create a logging instance, call the _logger_ function of the module, passing any options as the first argument:
 
-    var le = require('node-logentries');
+```javascript
+    var le = require('le_node');
     le.logger({ levels: { chill:0, meh:1, hmm:2, notgood:3, ohnoes:4, omgwtfbbq:5 } })
-
+```
 Each logger object is an instance of [EventEmitter](http://nodejs.org/docs/v0.4.10/api/events.html#events.EventEmitter). You can listen for the following events:
 
 * __connect :__ notification of sucessful connection to Logentries service
@@ -106,9 +107,10 @@ However, if installed as a winston transport (using the _winston_ method), then 
 
 For the API examples, assume the following lines of code at the top of your source code file:
 
-    var logentries = require('node-logentries')
+```javascript
+    var logentries = require('le_node')
     var log = logentries.logger({ token:'YOUR_TOKEN' })
-
+```
 This gives you a standard _log_ object.
 
 You should really also read the logentries.com documentation so that you understand how logentries.com works: 
@@ -118,10 +120,10 @@ You should really also read the logentries.com documentation so that you underst
 
 When you create a _log_ object with the _logger_ function on the module, you can supply the following options:
 
-* _token_:    required; logentries destination token uuid
-* _secure_:     optional; default is false; use tls for communication
-* _levels_:     optional; default is syslog-style; custom log levels
-* _timestamp_: optional; default is true; autogenerate a timestamp
+* __token :__    required; logentries destination token uuid
+* __secure :__     optional; default is false; use tls for communication
+* __levels :__     optional; default is syslog-style; custom log levels
+* __timestamp :__ optional; default is true; autogenerate a timestamp
 
 The _token_  entry relates to your logentries.com configuration. The _transport_ option allows you to 
 provide an alternative transport implementation (see below). 
@@ -129,12 +131,13 @@ provide an alternative transport implementation (see below).
 The levels option lets you specify custom log levels. You provide these as a object, the property names of which are the
 log levels. The value of each log level should be an integer specifying its order. For example:
 
+```javascript
     { lowest:0, lower:1, middle:2, higher:3, highest:4 }
-
+```
 
 ### `<loglevel>`: `log.<logelevel>( entry )`
 
-* _entry_: (required) log entry, can be string or JSON object
+* __entry :__ (required) log entry, can be string or JSON object
 
 Submit a log entry. The entry data will be submitted to logentries.com. If a logging connection to logentries.com is not open, a connection will be opened, and any pending entries will be processed in order.
 
@@ -146,8 +149,8 @@ The <loglevel> convenience methods are dynamically constructed from the configur
 
 ### `log.log(level,entry)`
 
-* _level_: (required) the name of the log level (must match one of the configured levels)
-* _entry_: (required) log entry, can be string or JSON object
+* __level :__ (required) the name of the log level (must match one of the configured levels)
+* __entry :__ (required) log entry, can be string or JSON object
 
 Submit a log entry, passing the name of the level programmatically. The dynamically constructed convenience methods, 
 such as _debug_, delegate to this method internally.
@@ -164,26 +167,30 @@ A log entry will only be submitted if the log level is greater than or equal to 
 
 This method is provided by the standard Node _EventEmitter_. Register callback functions to get notified of errors.
 The module cannot log errors itself, as it has nowhere to log them! Hosted environments may not provide writable disk access.
-Therefore, the module simply emits an error event that you can listen for. The module does also print errors to STDOUT by default, to help with debugging. Use the _printerror_ configuration setting to control this (see above).
+Therefore, the module simply emits an error event that you can listen for. The module does also print errors to STDOUT by default, to help with debugging. 
+Use the _printerror_ configuration setting to control this (see above).
 
+```javascript
     log.on('error',function(err){
       console.log('hangs around.... In bars!? '+err )
     }
-
+```
 You may also need to gain access to the verbatim log lines. You can listen to the _log_ event to do this:
 
+```javascript
     log.on('log',function(logline){
       console.log( logline )
     }
-
+```
 ### `log.level(name)`
 
-* _name_: (required) the name of the level
+* __name :__ (required) the name of the level
 
 Set the current log level. All log entries below this level will be ignored. All log levels are given an integer rank when they
 are specified. The default rankings are:
 
 
+```javascript
     {
       debug     :0,
       info      :1,
@@ -194,7 +201,7 @@ are specified. The default rankings are:
       alert     :6,
       emerg     :7
     }
-
+```
 For example, if you specify a level of _warning_, then log entries at levels _debug_, _info_, and _notice_ will be dropped.
 
     log.level('warning')
@@ -202,10 +209,10 @@ For example, if you specify a level of _warning_, then log entries at levels _de
 
 ### winston: `log.winston( winston, options )`
 
-* _winston_: (required) winston module
-* _options_: (optional) set the winston level _{level:'silly'}_
+* __winston :__ (required) winston module
+* __options :__ (optional) set the winston level _{level:'silly'}_
 
-The node-logentries module is fully compatible with the
+The le_node module is fully compatible with the
 [winston](https://github.com/indexzero/winston) logging module.  To
 log to logentries.com using winston, use the _winston_ method. This
 takes care of all the transport object registration and set up for
@@ -215,14 +222,15 @@ current log levels.
 There is an optional second argument to specify some integration options. At present this only lets you set the winston log level,
 (which is _info_ by default).
 
+```javascript
     var winston = require('winston')
     log.winston( winston, {level:'silly'} )
 
     // then use winston as normal
     winston.info('And I thought you were so rugged!')
-
+```
 With the winston API, you can specify a _meta_ parameter to a log
-entry. The node-logentries module converts this to a JSON string and
+entry. The le_node module converts this to a JSON string and
 appends it to the log entry string.
 
 

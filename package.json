@@ -1,19 +1,19 @@
 {
-  "name": "node-logentries",
+  "name": "le_node",
   "description": "A winston-compatible wrapper library for the logentries.com service",
   "keywords": ["log", "logging", "winston", "logentries", "logentries.com", "wrapper", "api"],
   "version": "0.2.0",
-  "homepage": "https://github.com/ptdixon/node-logentries",
+  "homepage": "https://github.com/ptdixon/le_node",
   "author": "Paul Dixon <paul.dixon@logentries.com> (http://logentries.com/)",
   "contributors": [ "Paul Dixon (https://github.com/ptdixon)" ],
   "dependencies": { },
   "main": "lib/logentries",
   "directories": { "lib": "lib" },
-  "repository": { "type" : "git", "url" : "https://github.com/ptdixon/node-logentries.git" },
+  "repository": { "type" : "git", "url" : "https://github.com/ptdixon/le_node.git" },
   "files":[
     "package.json",
     "README.md",
-    "lib/logentries.js" 
+    "lib/le_node.js" 
   ],
   "engines": {
     "node": "*"
