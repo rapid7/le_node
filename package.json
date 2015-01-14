@@ -2,7 +2,7 @@
   "name": "le_node",
   "description": "A winston-compatible wrapper library for the logentries.com service",
   "keywords": ["log", "logging", "winston", "logentries", "logentries.com", "wrapper", "api"],
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/logentries/le_node",
   "author": "Paul Dixon <paul.dixon@logentries.com> (http://logentries.com/)",
   "contributors": [ "Paul Dixon (https://github.com/ptdixon)" ],
