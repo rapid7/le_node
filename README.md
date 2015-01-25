@@ -2,7 +2,7 @@
 
 A ([winston](https://github.com/indexzero/winston) compatible) Node.js module for logging directly to your [logentries.com](http://logentries.com) account.
 
- *( Note: this new le_node module is a significanat rewrite, and may not be 100% compatible with the older node-logentries module. Let me know if you have any issues or suggestions. Thanks... )*
+ *( Note: this new le_node module is a significant rewrite, and may not be 100% compatible with the older node-logentries module. Let me know if you have any issues or suggestions. Thanks... )*
 
 ```javascript
     var logentries = require('le_node')
