@@ -1,6 +1,6 @@
 # le_node
 
-A ([winston](https://github.com/indexzero/winston) compatible) Node.js module for logging directly to your [logentries.com](http://logentries.com) account.
+A ([winston](https://github.com/flatiron/winston) compatible) Node.js module for logging directly to your [logentries.com](http://logentries.com) account.
 
  *( Note: this new le_node module is a significant rewrite, and may not be 100% compatible with the older node-logentries module. Let me know if you have any issues or suggestions. Thanks... )*
 
