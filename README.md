@@ -248,13 +248,13 @@ appends it to the log entry string.
 
 ### `log.end()`
 
-This module maintains an open HTTP connection to _api.logentries.com_, so that logging will be fast and efficient.
+This module maintains an open HTTP connection to _api.logentries.com_ so that logging will be fast and efficient.
 
-If you need to close the connection, call the end method. This primarily useful for unit testing to exit the test process.
+If you need to close the connection, call the end method. This is primarily useful for unit testing to exit the test process.
 
 ## Testing
 
-The unit tests use [mocha](http://visionmedia.github.com/mocha/), and are in the _test_ folder.
+The unit tests use [mocha](http://visionmedia.github.com/mocha/) and are in the _test_ folder.
 
 ```javascript
     mocha test/le_node.test.js
