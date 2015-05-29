@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/bathos/logentries-client.svg?branch=master)](https://travis-ci.org/bathos/logentries-client)
+[![Build Status](https://travis-ci.org/logentries/le_node.svg?branch=master)](https://travis-ci.org/logentries/le_node)
 
 # le_node: Logentries Client
 
