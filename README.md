@@ -15,6 +15,10 @@ Tested in Node v0.10 + and io.js. It probably works in Node 0.8 too, but one of
 the test libraries ([mitm](https://www.npmjs.com/package/mitm)) doesn’t, so it
 remains unconfirmed.
 
+What is now "le_node" was previously "logentries-client"; users of le_node
+versions before 1.0.2 should read the sections below that detail differences if
+they wish to update.
+
 <!-- MarkdownTOC autolink=true bracket=round -->
 
 - [Start](#start)
@@ -312,15 +316,15 @@ That’s it -- once you have the token you’re set.
 Previously, "le_node" and "logentries-client" were two different modules. The
 former has been replaced with the latter codebase, but the le_node name is the
 canonical repo (it’s referenced in many places). It’s still possible to get
-logentries-client under that name on NPM, but it’s just an alias for le_node
-now.
+logentries-client under that name on NPM, but it’s soon just going to be an
+alias for this repository, le_node.
 
 For users of le_node from before this switch, there are some important
-differences to note before you upgrade.
+differences to note before upgrading.
 
-The new codebase follows the same essential pattern, and if all you did
-previously was instantiate the client and then call the logging methods, there
-should be no breaking changes.
+The new codebase does follow the same essential pattern. If you only used the
+client constructor and the log methods previously, there may be no breaking
+changes for you. But for anybody else...
 
 ### Breaking Change: `client.end()`
 
@@ -337,31 +341,40 @@ For the functionality previously provided by `.end()`, use `.closeConnection()`.
 The old le_node had a method called `level()` for setting the minimum log level.
 This is now a property (not a method) called `minLevel`. It can be set to either
 the name of the level or its index. The `level()` method has been added to the
-new codebase to facilitate migration but will be removed at a later date.
+new codebase to facilitate migration, but will be removed at a later date.
 
 Simply requiring le_node now automatically provisions Winston, if present, with
 a Logentries transport constructor. You don’t have to do anything else. The
-`winston()` method has been added to the new codebase to facilitate migration
+`winston()` method has also been added to the new codebase to prevent errors,
 but it’s a noop and will be removed at a later date.
 
 ### Other Things For Migrants to Note
 
 The old documentation seemed to suggest that placing a listener on the client
-for error events was an optional thing. **This was always untrue. An unhandled
-error event from an EventEmitter is an unhandled error period.** If you do not
-place a listener for error events, your application will crash if the client
-emits an error!
+for error events was an optional thing. This isn’t the case (and wasn’t the
+case in the old client, either). An unhandled error event from an EventEmitter
+is an unhandled error period. If you don’t place a listener for error events,
+your application will crash if the client emits an error.
 
-There are many new things you can now customize, and many outstanding bugs from
-the old le_node codebase never affected logentries-client -- circular refs are
-fine, `time` and `level` properties will never collide with existing props, and
-JSON serialization is much more robust and customizable. The connection is
-closed on extended inactivity and only reopened when needed; errors are handled
-correctly (no more try-catch around async ops -- ack!); there is built-in
-support for Bunyan, deep JSON objects won’t be arbitrarily cut at a certain
-depth, etc.
+The new codebase has a lot of new features, including some that are similar to,
+but not necessarilly the same as, old features that had been removed at some
+point or were just not documented.
 
-You should assume that there may be other breaking changes which I am unaware
+The outstanding issues that exist for le_node at the time of writing are mostly
+things which either never affected this codebase or no longer make sense in
+regard to it.
+
+ - circular refs are fine
+ - `time` and `level` properties will never collide with existing props and are
+   both optional
+ - JSON serialization is much more robust and customizable
+ - serialized objects will not be cut off at an arbitrary depth
+ - the connection is closed on extended inactivity and only reopened as needed
+ - errors are handled correctly
+ - there is built-in support for Bunyan
+ - Winston is provisioned in accord with prevailing conventions
+
+You should assume that there are other breaking changes which I am unaware
 of. When I wrote Logentries Client I hadn’t considered that it might replace
 le_node, so unfortunately interoperability was not on my mind. You’ll wish to
 test thoroughly before updating an existing codebase to use the new client.
@@ -375,6 +388,7 @@ test thoroughly before updating an existing codebase to use the new client.
    called logentries-client.
  - Added `level()` and `winston()` methods with deprecation warnings so that
    existing le_node applications do not throw TypeErrors.
+ - Added events for 'connected', 'disconnected' and 'connection drain'
 
 ## Changelog (Old Logentries-Client)
 
@@ -453,13 +467,9 @@ test thoroughly before updating an existing codebase to use the new client.
  - Added KVP-style flattening options & made it default
  - Added more tests and options
 
-### 0.1.0
+### 0.1.0 - 0.0.2
 
- - Code cleanup and tests
-
-### 0.0.2
-
- - Code cleanup and bug fixes
+ - Code cleanup, bug fixes and tests
 
 ### 0.0.1
 
