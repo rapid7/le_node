@@ -1,0 +1,10 @@
+/.git
+/.gobble-build
+/docs
+/node_modules
+/src
+/test
+.travis.yml
+.npmignore
+gobblefile.js
+!/lib/node_modules
