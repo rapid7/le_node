@@ -41,11 +41,9 @@ they wish to update.
 ## Start
 
 ```javascript
-var LogentriesClient = require('logentries-client');
+var Logger = require('le_node');
 
-var logger = new LogentriesClient({
-	token: 'myAccessToken'
-});
+var logger = new Logger({ token: 'myAccessToken' });
 
 logger.warning('The kittens have become alarmingly adorable.')
 ```
@@ -260,18 +258,23 @@ Logentries client will place the transport constructor at `winston.transports`,
 even if Winston itself hasn’t yet been required.
 
 ```javascript
-var winston = require('winston');
 var LogentriesClient = require('logentries-client');
+var winston = require('winston');
 
-winston.add(winston.transports.Logentries, opts);
+assert(winston.transports.Logentries);
 ```
 
-The usual options are supported. If custom levels are not provided, Winston’s
-defaults will be used.
+When adding a new Logentries transport, the options argument passed to Winston’s
+`add` method supports the usual options in addition to those which are Winston-
+specific. If custom levels are not provided, Winston’s defaults will be used.
+
+```javascript
+winston.add(winston.transports.Logentries, { token: myToken });
+```
 
 In the hard-to-imagine case where you’re using Winston without including it in
 package.json, you can explicitly provision the transport by first requiring
-Winston and then calling `LogentriesClient.provisionWinston()`.
+Winston and then calling `Logger.provisionWinston()`.
 
 ## Using with Bunyan
 
@@ -294,11 +297,14 @@ var logger = bunyan.createLogger({
 });
 ```
 
-Note that with Bunyan, only the first six log levels will be used, and
-timestamps are provided by Bunyan already. Other options are the same. If after
-creation you wish to change the minimum log level, use Bunyan’s methods. The
-stream will be named ‘logentries,’ though you can change it on the object
-returned by `bunyanStream()`.
+As with Winston, the options argument takes the normal constructor options (with
+the exception of `timestamp`, which is an option you should set on Bunyan itself
+instead). Bunyan uses six log levels, so the seventh and eighth, if provided,
+will be ignored; by default Bunyan’s level names will be used.
+
+The object returned by `bunyanStream` is the Bunyan logging ‘channel’ definition
+in total. If you want to futz with this you can -- you can change its `name` or
+get the `stream` object itself from here.
 
 ## Setting Up With Logentries Itself
 
