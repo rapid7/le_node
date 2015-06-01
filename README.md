@@ -258,7 +258,7 @@ Logentries client will place the transport constructor at `winston.transports`,
 even if Winston itself hasn’t yet been required.
 
 ```javascript
-var LogentriesClient = require('logentries-client');
+var Logger = require('le_node');
 var winston = require('winston');
 
 assert(winston.transports.Logentries);
@@ -283,17 +283,17 @@ For Bunyan it’s like so:
 ```javascript
 var bunyan = require('bunyan');
 
-var LogentriesClient = require('logentries-client');
+var Logger = require('le_node');
 
-var leBunyan = LogentriesClient.bunyanStream(opts);
+var loggerDefinition = Logger.bunyanStream({ token: myToken });
 
 // One stream
-var logger = bunyan.createLogger(leBunyan);
+var logger1 = bunyan.createLogger(loggerDefinition);
 
 // Multiple streams
-var logger = bunyan.createLogger({
+var logger2 = bunyan.createLogger({
 	name: 'whatevs',
-	streams: [ leBunyan, otherStream ]
+	streams: [ loggerDefinition, otherLoggerDefinition ]
 });
 ```
 
