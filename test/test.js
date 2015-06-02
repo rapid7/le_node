@@ -548,4 +548,3 @@ tape('Bunyan integration is provided.', function(t) {
 
 	logger[defaults.bunyanLevels[3]]({ yes: 'okay' });
 });
-
