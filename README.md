@@ -85,7 +85,7 @@ accessors, though, and invalid values will be ignored.
  - **timestamp**: If truthy, prefix entries with an ISO timestamp (if strings)
    or add the same as a property (if objects). Default: `false`.
  - **withLevel**: Will prepend (string) or add property (object) indicating the
-   log level.
+   log level. Default: `true`.
  - **withStack**: If an object is or contains an `Error` object, setting this to
    `true` will cause the stack trace to be included. Default: `false.`
 
