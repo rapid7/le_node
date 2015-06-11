@@ -32,8 +32,9 @@
   },
   "main": "lib/node_modules/logger.js",
   "scripts": {
-    "prepublish": "gobble build lib --force",
-    "test": "gobble build lib --force && node test/test.js | tap-spec"
+    "build": "gobble build lib --force",
+    "prepublish": "npm run build",
+    "test": "npm run build && node test/test.js | tap-spec"
   },
   "engines": {
     "iojs": ">=0.10",
@@ -41,16 +42,16 @@
     "npm": ">=1.4.6"
   },
   "dependencies": {
-    "babel-runtime": "^5.4.7",
-    "codependency": "^0.1.3",
-    "json-stringify-safe": "^5.0.1",
-    "lodash": "^3.5.0"
+    "babel-runtime": "5.4.7",
+    "codependency": "0.1.3",
+    "json-stringify-safe": "5.0.1",
+    "lodash": "3.9.3"
   },
   "devDependencies": {
     "bunyan": "^1.3.4",
-    "gobble": "^0.10.2",
-    "gobble-babel": "^5.1.0",
-    "gobble-cli": "^0.4.2",
+    "gobble": "0.10.2",
+    "gobble-babel": "5.1.0",
+    "gobble-cli": "0.4.2",
     "mitm": "^1.1.0",
     "tap-spec": "^3.0.0",
     "tape": "^4.0.0",
