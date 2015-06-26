@@ -1,6 +1,6 @@
 {
   "name": "le_node",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "dependencies": {
     "babel-runtime": {
       "version": "5.4.7",
