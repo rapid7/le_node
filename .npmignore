@@ -6,5 +6,7 @@
 /test
 .travis.yml
 .npmignore
+.eslintignore
+.eslintrc
 gobblefile.js
 !/lib/node_modules
