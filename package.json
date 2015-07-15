@@ -25,7 +25,7 @@
       "email": "paul.dixon@logentries.com"
     }
   ],
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
     "url": "https://github.com/logentries/le_node.git"
