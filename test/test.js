@@ -187,7 +187,7 @@ tape('Arguments and regex patterns are serialized.', function(t) {
 
 	var logger = new Logger({ token: x });
 
-	t.true(logger.serialize(argObj) === '[1,2,3]', 'arguments become arrays.')
+	t.true(logger.serialize(argObj) === '[1,2,3]', 'arguments become arrays.');
 
 	t.true(logger.serialize(regObj) === '"/abc/"', 'patterns become strings');
 
@@ -442,6 +442,26 @@ tape('JSON logs match expected pattern.', function(t) {
 
 	logger[lvl]({ msg: null, level: 'o' });
 
+});
+
+tape('Directly logged error objects survive.', function(t) {
+	t.plan(1);
+	t.timeoutAfter(500);
+
+	var message = 'warp breach imminent';
+	var error = new Error(message);
+	var logger = new Logger({ token: x });
+
+	logger.on('error', function() {
+		t.fail('error logged');
+	});
+
+	mockTest(function(data) {
+		var log = JSON.parse(data.substr(37));
+		t.equal(log.message, message, 'error logged');
+	});
+
+	logger.log(error);
 });
 
 tape('Invalid calls to log methods emit error.', function(t) {
