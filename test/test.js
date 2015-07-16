@@ -1,4 +1,5 @@
-/* jshint node: true, esnext: true */
+/* eslint-disable */
+
 'use strict';
 
 // REQUIRES ////////////////////////////////////////////////////////////////////
@@ -37,7 +38,7 @@ tape('Weird value for custom levels object throws.', function(t) {
 	t.throws(levels.normalize.bind(null, { levels: 'cheese' }), 'string');
 	t.throws(levels.normalize.bind(null, { levels: NaN }), 'number (NaN)');
 	t.throws(levels.normalize.bind(null, { levels: true }), 'boolean');
-	
+
 	t.end();
 });
 
@@ -62,7 +63,7 @@ tape('Custom levels with invalid names throw.', function(t) {
 	t.throws(levels.normalize.bind(null, { levels: [ [] ] }), 'object');
 	t.throws(levels.normalize.bind(null, { levels: [ true ] }), 'boolean');
 	t.throws(levels.normalize.bind(null, { levels: [ NaN ] }), 'NaN');
-	
+
 	t.end();
 });
 
@@ -75,7 +76,7 @@ tape('Custom levels with duplicate names throw.', function(t) {
 
 	t.doesNotThrow(levels.normalize.bind(null, { levels: [ 'A', 'a' ] }),
 		'case sensitive');
-	
+
 	t.end();
 });
 
@@ -452,7 +453,8 @@ tape('Directly logged error objects survive.', function(t) {
 	var error = new Error(message);
 	var logger = new Logger({ token: x });
 
-	logger.on('error', function() {
+	logger.on('error', function(err) {
+		t.comment(err.stack);
 		t.fail('error logged');
 	});
 
