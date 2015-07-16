@@ -1,6 +1,6 @@
 {
   "name": "le_node",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Logentries client for node; use with or without Winston or Bunyan.",
   "keywords": [
     "logentries",
