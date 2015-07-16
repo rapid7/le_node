@@ -28,7 +28,7 @@ they wish to update.
 - [Log Entries](#log-entries)
 - [Methods](#methods)
 - [Buffer & Connection Issues](#buffer--connection-issues)
-- [Using as a Winston ‘Transport’](#using-as-a-winston-transport)
+- [Using as a Winston ‘Transport’](#using-as-a-winston-‘transport’)
 - [Using with Bunyan](#using-with-bunyan)
 - [Setting Up With Logentries Itself](#setting-up-with-logentries-itself)
 - [2015-05-26: le_node & Logentries-Client](#2015-05-26-le_node--logentries-client)
@@ -386,6 +386,21 @@ le_node, so unfortunately interoperability was not on my mind. You’ll wish to
 test thoroughly before updating an existing codebase to use the new client.
 
 ## Changelog (Post-Merge)
+
+### 1.0.9
+
+ - Fixes serialization bug in cases where the root-level object is itself
+   exotic or otherwise does not ‘have own properties,’ including directly logged
+   errors.
+
+### 1.0.8
+
+ - Fixed bugged handling of Winston’s ‘meta’ parameter.
+
+### 1.0.7
+
+ - Fixed nested dependency issues with shrinkwrap.
+ - Various minor changes (docs, etc)
 
 ### 1.0.2
 
