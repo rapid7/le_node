@@ -33,7 +33,7 @@
   "main": "lib/node_modules/logger.js",
   "scripts": {
     "build": "gobble build lib --force",
-    "lint": "eslint src/**/*.js",
+    "lint": "eslint src",
     "prepublish": "npm run build",
     "test": "npm run build && npm run lint && node test/test.js | tap-spec"
   },
