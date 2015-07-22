@@ -62,6 +62,6 @@
     "winston": "^1.0.0"
   },
   "optionalPeerDependencies": {
-    "winston": "~1.0.0"
+    "winston": "*"
   }
 }
