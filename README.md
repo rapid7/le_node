@@ -68,6 +68,8 @@ accessors, though, and invalid values will be ignored.
    methods. More details on this below.
  - **minLevel**: The minimum level to actually record logs at. String or Number.
    Defaults to 0.
+ - **bufferSize**: The maximum number of log entries that may be queued for
+   sending at a given moment. Default: `100`.
  - **secure:** If truthy, uses a tls connection. Default: `false`.
  - **timeout:** The time, in milliseconds, that inactivity should warrant
    closing the connection to the host until needed again. Defaults to three
@@ -236,9 +238,16 @@ stdout, for example.
 ## Buffer & Connection Issues
 
 If there’s a problem with the connection, entries will be buffered to a max of
-60 entries. After that, error events will be emitted when trying to log further.
-If the buffer drains, normal logging can resume. If `console` is true, these log
-entries will still pass through there, but they will not make it to LogEntries.
+100 entries by default. After that, error events will be emitted when trying to
+log further. If the buffer drains, normal logging can resume. If `console` is
+true, these log entries will still display there, but they will not make it to
+LogEntries.
+
+You can adjust the maximum size of the buffer with the `bufferSize` option.
+You’ll want to raise it if you’re dealing with very high volume (either a high
+number of logs per second, or when log entries are unusually long on average).
+Outside of these situations, exceeding the max buffer size is more likely an
+indication of creating logs in a synchronous loop (which seems like a bad idea).
 
 If the connection fails, it will retry with an exponential backoff for several
 minutes. If it does not succeed in that time, an error is emitted. A ‘ban’ will
