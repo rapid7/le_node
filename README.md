@@ -396,6 +396,10 @@ test thoroughly before updating an existing codebase to use the new client.
 
 ## Changelog (Post-Merge)
 
+### 1.0.14
+
+ - Allows setting port with a string instead of a number.
+
 ### 1.0.13
  
  - Fixes bug with winston transport’s `level` property.
