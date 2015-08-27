@@ -396,6 +396,11 @@ test thoroughly before updating an existing codebase to use the new client.
 
 ## Changelog (Post-Merge)
 
+### 1.0.15
+
+ - Bubbles errors up correctly when using the Bunyan and Winston constructors
+ - Serializer no longer chokes on objects created with a null prototype
+
 ### 1.0.14
 
  - Allows setting port with a string instead of a number.
