@@ -236,6 +236,22 @@ tape('Circular references don’t make the sad times.', function(t) {
 	t.end();
 });
 
+tape('Object.create(null) objects don’t destroy everything.', function(t) {
+	var nullObj = Object.create(null);
+
+	nullObj.prop = 1;
+
+	var logger = new Logger({ token: x });
+
+	var res = JSON.parse(logger.serialize(nullObj));
+
+	t.true(res, 'null-prototype object doesn’t throw');
+
+	t.equal(res.prop, 1, 'properties are still seen');
+
+	t.end();
+});
+
 // FLATTENED DATA //////////////////////////////////////////////////////////////
 
 tape('Flattening options work.', function(t) {
