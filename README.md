@@ -396,6 +396,11 @@ test thoroughly before updating an existing codebase to use the new client.
 
 ## Changelog (Post-Merge)
 
+### 1.1.00
+
+ - The `.end()` method will not synchronously terminate the underlying
+   connection anymore. Instead, it waits for drain before doing so.
+
 ### 1.0.15
 
  - Bubbles errors up correctly when using the Bunyan and Winston constructors
