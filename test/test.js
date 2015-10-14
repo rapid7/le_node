@@ -87,11 +87,11 @@ tape('Custom levels with conflicting names throw.', function(t) {
 	}
 
 	t.throws(makeLogger.bind(null, [ 'log' ]), 'own property');
-	
+
 	t.throws(makeLogger.bind(null, [ 'write' ]), 'inherited property');
 
 	t.doesNotThrow(makeLogger.bind(null, [ 'propX' ]), 'valid property');
-	
+
 	t.end();
 });
 
@@ -197,7 +197,7 @@ tape('Arguments and regex patterns are serialized.', function(t) {
 
 tape('Custom value transformer is respected.', function(t) {
 	function alwaysKittens(key, val) {
-		return _.isObject(val) ? val : 'kittens'; 
+		return _.isObject(val) ? val : 'kittens';
 	}
 
 	var log = {
@@ -549,6 +549,29 @@ tape('Winston integration is provided.', function(t) {
 	});
 
 	winston.warn('mysterious radiation');
+});
+
+tape("Winston supports json logging.", function(t) {
+	t.plan(2);
+	t.timeoutAfter(2000);
+
+	var logger = new (winston.Logger)({
+    	transports: [
+      		new (winston.transports.Logentries)({ token: x, json: true })
+    	]
+  	});
+
+	mockTest(function(data) {
+		t.pass("winston logs in json format");
+		var expect = {
+			message: "msg",
+			foo: "bar",
+			level: "warn"
+		};
+		t.equal(data, x + " " + JSON.stringify(expect) + '\n', 'json as expected');
+	});
+
+	logger.warn("msg", {foo: "bar"});
 });
 
 // BUNYAN STREAM ///////////////////////////////////////////////////////////////
