@@ -396,7 +396,11 @@ test thoroughly before updating an existing codebase to use the new client.
 
 ## Changelog (Post-Merge)
 
-### 1.1.00
+### 1.1.1
+
+ - Fixes handling of winston’s meta object (gcoonrod)
+
+### 1.1.0
 
  - The `.end()` method will not synchronously terminate the underlying
    connection anymore. Instead, it waits for drain before doing so.
