@@ -551,12 +551,15 @@ tape('Winston integration is provided.', function(t) {
 	winston.warn('mysterious radiation');
 });
 
-tape.only("Winston supports json logging.", function(t) {
+tape("Winston supports json logging.", function(t) {
 	t.plan(2);
 	t.timeoutAfter(2000);
 
-	//winston.remove(winston.transports.Logentries);
-	winston.add(winston.transports.Logentries, { token: x, json: true});
+	var logger = new (winston.Logger)({
+    	transports: [
+      		new (winston.transports.Logentries)({ token: x, json: true })
+    	]
+  	});
 
 	mockTest(function(data) {
 		t.pass("winston logs in json format");
@@ -568,7 +571,7 @@ tape.only("Winston supports json logging.", function(t) {
 		t.equal(data, x + " " + JSON.stringify(expect) + '\n', 'json as expected');
 	});
 
-	winston.warn("msg", {foo: "bar"});
+	logger.warn("msg", {foo: "bar"});
 });
 
 // BUNYAN STREAM ///////////////////////////////////////////////////////////////
