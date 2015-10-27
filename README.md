@@ -396,6 +396,10 @@ test thoroughly before updating an existing codebase to use the new client.
 
 ## Changelog (Post-Merge)
 
+### 1.1.2
+
+ - Update codependency to fix vulnerable dependency
+
 ### 1.1.1
 
  - Fixes handling of winston’s meta object (gcoonrod)
