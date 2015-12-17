@@ -328,7 +328,7 @@ function mockTest(cb) {
 }
 
 tape('Data is sent over standard connection.', function(t) {
-	t.plan(3);
+	t.plan(4);
 	t.timeoutAfter(2000);
 
 	var lvl = defaults.levels[3];
@@ -343,6 +343,7 @@ tape('Data is sent over standard connection.', function(t) {
 
 		socket.on('data', function(buffer) {
 			t.pass('data received');
+			t.equal(socket.encrypted, undefined, 'socket is not secure');
 
 			var log = buffer.toString();
 			var expected = [ tkn, lvl, msg + '\n' ].join(' ');
@@ -359,7 +360,7 @@ tape('Data is sent over standard connection.', function(t) {
 });
 
 tape('Data is sent over secure connection.', function(t) {
-	t.plan(2);
+	t.plan(5);
 	t.timeoutAfter(2000);
 
 	var lvl = defaults.levels[3];
@@ -373,8 +374,18 @@ tape('Data is sent over secure connection.', function(t) {
 		t.pass('connection made');
 
 		t.equal(opts.port, defaults.portSecure, 'correct port');
+		t.equal(socket.encrypted, true, 'socket is secure');
 
-		mock.disable();
+		socket.on('data', function(buffer) {
+			t.pass('data received');
+
+			var log = buffer.toString();
+			var expected = [ tkn, lvl, msg + '\n' ].join(' ');
+
+			t.equal(log, expected, 'message matched');
+
+			mock.disable();
+		});
 	});
 
 	var logger = new Logger({ token: tkn, secure: true });
