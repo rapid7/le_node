@@ -1851,6 +1851,11 @@
           "resolved": "https://registry.npmjs.org/stack-trace/-/stack-trace-0.0.9.tgz"
         }
       }
+    },
+    "semver": {
+      "version": "5.1.0",
+      "from": "semver@*",
+      "resolved": "https://registry.npmjs.org/semver/-/semver-5.1.0.tgz"
     }
   }
 }
