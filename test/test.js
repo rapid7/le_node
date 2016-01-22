@@ -12,6 +12,8 @@ var Logger   = require('../lib/node_modules/logger.js');
 var mitm     = require('mitm');
 var tape     = require('tape');
 var winston  = require('winston');
+var winston1 = require('winston1');
+var winston2 = require('winston2x');
 
 // FAKE TOKEN //////////////////////////////////////////////////////////////////
 
@@ -571,6 +573,94 @@ tape("Winston supports json logging.", function(t) {
       		new (winston.transports.Logentries)({ token: x, json: true })
     	]
   	});
+
+	mockTest(function(data) {
+		t.pass("winston logs in json format");
+		var expect = {
+			message: "msg",
+			foo: "bar",
+			level: "warn"
+		};
+		t.equal(data, x + " " + JSON.stringify(expect) + '\n', 'json as expected');
+	});
+
+	logger.warn("msg", {foo: "bar"});
+});
+
+tape('Winston@1.1.2 integration is provided.', function(t) {
+	t.plan(4);
+	t.timeoutAfter(2000);
+
+	t.true(winston1.transports.Logentries,
+		'provisioned constructor automatically');
+
+	t.doesNotThrow(function() {
+		winston1.add(winston1.transports.Logentries, { token: x });
+	}, 'transport can be added');
+
+	winston1.remove(winston1.transports.Console);
+
+	mockTest(function(data) {
+		t.pass('winston log transmits');
+		t.equal(data, x + ' warn mysterious radiation\n', 'msg as expected');
+	});
+
+	winston1.warn('mysterious radiation');
+});
+
+tape("Winston@1.1.2 supports json logging.", function(t) {
+	t.plan(2);
+	t.timeoutAfter(2000);
+
+	var logger = new (winston1.Logger)({
+		transports: [
+			new (winston1.transports.Logentries)({ token: x, json: true })
+		]
+	});
+
+	mockTest(function(data) {
+		t.pass("winston logs in json format");
+		var expect = {
+			message: "msg",
+			foo: "bar",
+			level: "warn"
+		};
+		t.equal(data, x + " " + JSON.stringify(expect) + '\n', 'json as expected');
+	});
+
+	logger.warn("msg", {foo: "bar"});
+});
+
+tape('Winston@2.1.1 integration is provided.', function(t) {
+	t.plan(4);
+	t.timeoutAfter(2000);
+
+	t.true(winston2.transports.Logentries,
+		'provisioned constructor automatically');
+
+	t.doesNotThrow(function() {
+		winston2.add(winston2.transports.Logentries, { token: x });
+	}, 'transport can be added');
+
+	winston2.remove(winston2.transports.Console);
+
+	mockTest(function(data) {
+		t.pass('winston log transmits');
+		t.equal(data, x + ' warn mysterious radiation\n', 'msg as expected');
+	});
+
+	winston2.warn('mysterious radiation');
+});
+
+tape("Winston@2.1.1 supports json logging.", function(t) {
+	t.plan(2);
+	t.timeoutAfter(2000);
+
+	var logger = new (winston2.Logger)({
+		transports: [
+			new (winston2.transports.Logentries)({ token: x, json: true })
+		]
+	});
 
 	mockTest(function(data) {
 		t.pass("winston logs in json format");

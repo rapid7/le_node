@@ -60,9 +60,13 @@
     "mitm": "^1.1.0",
     "tap-spec": "^3.0.0",
     "tape": "^4.0.0",
-    "winston": "^1.0.0"
+    "winston": "^1.0.0",
+    "winston1": "^1.1.2",
+    "winston2x": "^2.1.1"
   },
   "optionalPeerDependencies": {
-    "winston": "*"
+    "winston": "*",
+    "winston1": "*",
+    "winston2x": "*"
   }
 }
