@@ -46,7 +46,8 @@
     "babel-runtime": "5.4.7",
     "codependency": "0.1.4",
     "json-stringify-safe": "5.0.1",
-    "lodash": "3.9.3"
+    "lodash": "3.9.3",
+    "semver": "^5.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^3.1.23",
@@ -59,9 +60,13 @@
     "mitm": "^1.1.0",
     "tap-spec": "^3.0.0",
     "tape": "^4.0.0",
-    "winston": "^1.0.0"
+    "winston": "^1.0.0",
+    "winston1": "^1.1.2",
+    "winston2x": "^2.1.1"
   },
   "optionalPeerDependencies": {
-    "winston": "*"
+    "winston": "*",
+    "winston1": "*",
+    "winston2x": "*"
   }
 }

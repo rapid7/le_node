@@ -1851,6 +1851,21 @@
           "resolved": "https://registry.npmjs.org/stack-trace/-/stack-trace-0.0.9.tgz"
         }
       }
+    },
+    "winston1": {
+      "version": "1.1.2",
+      "from": "winston1@*",
+      "resolved": "https://registry.npmjs.org/winston1/-/winston1-1.1.2.tgz"
+    },
+    "winston2x": {
+      "version": "2.1.1",
+      "from": "winston2x@*",
+      "resolved": "https://registry.npmjs.org/winston2x/-/winston2x-2.1.1.tgz"
+    },
+    "semver": {
+      "version": "5.1.0",
+      "from": "semver@*",
+      "resolved": "https://registry.npmjs.org/semver/-/semver-5.1.0.tgz"
     }
   }
 }
