@@ -55,7 +55,7 @@
     "eslint": "^0.24.1",
     "eslint-plugin-babel": "^1.1.0",
     "gobble": "0.10.2",
-    "gobble-babel": "5.1.0",
+    "gobble-babel": "5.5.8",
     "gobble-cli": "0.4.2",
     "mitm": "^1.1.0",
     "tap-spec": "^3.0.0",
