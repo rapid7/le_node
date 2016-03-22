@@ -32,9 +32,7 @@
   },
   "main": "lib/node_modules/logger.js",
   "scripts": {
-    "build": "gobble build lib --force",
     "lint": "eslint src",
-    "prepublish": "npm run build",
     "test": "npm run build && npm run lint && node test/test.js | tap-spec"
   },
   "engines": {
@@ -43,20 +41,13 @@
     "npm": ">=1.4.6"
   },
   "dependencies": {
-    "babel-runtime": "5.4.7",
     "codependency": "0.1.4",
     "json-stringify-safe": "5.0.1",
     "lodash": "3.9.3",
     "semver": "^5.1.0"
   },
   "devDependencies": {
-    "babel-eslint": "^3.1.23",
     "bunyan": "^1.3.4",
-    "eslint": "^0.24.1",
-    "eslint-plugin-babel": "^1.1.0",
-    "gobble": "0.10.2",
-    "gobble-babel": "5.1.0",
-    "gobble-cli": "0.4.2",
     "mitm": "^1.1.0",
     "tap-spec": "^3.0.0",
     "tape": "^4.0.0",
