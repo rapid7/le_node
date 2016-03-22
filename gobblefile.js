@@ -3,11 +3,15 @@ var gobble = require('gobble');
 
 module.exports = gobble('src').transform('babel', {
 	comments: false,
-	optional: [
-		'es7.asyncFunctions',
-		'es7.decorators',
-		'runtime',
-		'validation.undeclaredVariableCheck'
+	sourceMaps: true,
+	presets: [
+		'es2015',
+		'stage-3'
 	],
-	sourceMaps: true
+	plugins: [
+		'syntax-decorators',
+		'transform-decorators-legacy',
+		'transform-runtime',
+		'add-module-exports'
+	]
 });
