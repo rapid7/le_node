@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "babel": "^6.5.2",
-    "babel-eslint": "^5.0.0",
+    "babel-eslint": "^6.0.2",
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-syntax-decorators": "^6.5.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
