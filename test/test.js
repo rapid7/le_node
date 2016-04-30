@@ -238,6 +238,24 @@ tape('Circular references don’t make the sad times.', function(t) {
 	t.end();
 });
 
+tape('Serialize objects that inherit from non-Object objects fine', function(t) {
+	function NullObj() {}
+	NullObj.prototype = Object.create(null);
+	var newObj = new NullObj();
+
+	newObj.prop = 1;
+
+	var logger = new Logger({ token: x });
+
+	var res = JSON.parse(logger.serialize(newObj));
+
+	t.true(res, 'object from non object doesn’t throw');
+
+	t.equal(res.prop, 1, 'properties are still seen');
+
+	t.end();
+});
+
 tape('Object.create(null) objects don’t destroy everything.', function(t) {
 	var nullObj = Object.create(null);
 
