@@ -76,6 +76,8 @@ accessors, though, and invalid values will be ignored.
    minutes.
  - **maxFailedAttempts:** The number of times to retry to reach the logentries
    host in case of error when connecting. Default: `15`.
+ - **retryTimeout:** Time to wait between attemps when trying to reach the logentries
+   host. Default: `15 * 60 * 1000`.
 
 ### Log Processing Options
  - **flatten**: Convert objects into a single-level object where the values of
