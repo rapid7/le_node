@@ -374,7 +374,7 @@ tape('Data is sent over standard connection.', function(t) {
 		});
 	});
 
-	var logger = new Logger({ token: tkn });
+	var logger = new Logger({ token: tkn , secure: false});
 
 	logger[lvl](msg);
 });

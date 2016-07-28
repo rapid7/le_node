@@ -71,6 +71,20 @@ accessors, though, and invalid values will be ignored.
  - **bufferSize**: The maximum number of log entries that may be queued for
    sending at a given moment. Default: `100`.
  - **secure:** If truthy, uses a tls connection. Default: `false`.
+ - **inactivityTimeout:** The time, in milliseconds, that inactivity should warrant
+   closing the connection to the host until needed again. Defaults to 15 seconds.
+ - **reconnectInitialDelay**: Initial wait time in milliseconds while reconnecting. 
+   Default: `1000
+ - **reconnectMaxDelay**: Maximum wait time in milliseconds while reconnecting.
+   Default: `15 * 1000`
+ - **reconnectBackoffStrategy**: Backoff strategy to be used while trying to reconnect.
+   It can be either `fibonacci` or `exponential`. Default: `fibonnacci`   
+ - **maxFailedAttempts:** [Removed with new connection handling]
+   The number of times to retry to reach the logentries host in case of 
+   error when connecting. Default: `15`.
+ - **retryTimeout:** [Removed with new connection handling] 
+   Time to wait between attemps when trying to reach the logentries host. 
+   Default: `15 * 60 * 1000`.
 
 ### Log Processing Options
  - **flatten**: Convert objects into a single-level object where the values of
@@ -154,10 +168,11 @@ errors that occur during instantiation, as opposed to operation, will **throw**.
 Triggered when a log is about to be written to the underlying connection. The
 prepared log object or string is supplied as an argument.
 
-### `'connected'` and `'disconnected'`
-These indicate when a new connection to the host is established or has ended.
-Disconnection is normal if the connection is inactive for several minutes; it
-will be reopened when needed again.
+### `'connected'` and `'disconnected'` and `'timed out'` 
+These indicate when a new connection to the host is established, destroyed or 
+timed out due to client side inactivity. Inactivity timeout is normal if the connection 
+is inactive for a configurable period of time (see inactivityTimeout); it will 
+be reopened when needed again. Disconnection can be either a result of socket inactivity or a network failure.
 
 ### `'drain'`, `'finish'`, `'pipe'`, and `'unpipe'`
 These are events inherited from `Writable`. Note that the drain event here is
@@ -246,10 +261,10 @@ number of logs per second, or when log entries are unusually long on average).
 Outside of these situations, exceeding the max buffer size is more likely an
 indication of creating logs in a synchronous loop (which seems like a bad idea).
 
-If the connection fails, it will retry with an exponential backoff for several
-minutes. If it does not succeed in that time, an error is emitted. A ‘ban’ will
-be placed on further attempts but it will lift after some more time has passed,
-at which point the process can repeat (and hopefully work).
+If the connection fails, it will keep retrying with a `fibonacci` backoff by default. 
+Connection retry will start with a delay of `reconnectInitialDelay` and the delay between each retry 
+will go up to a maximum of `reconnectMaxDelay` with each retry in fibonacci sequence. 
+Backoff strategy can be changed to `exponential` through constructor if necessary.
 
 A connection to the host does not guarantee that your logs are transmitting
 successfully. If you have a bad token, there is no feedback from the server to

@@ -5,3 +5,5 @@
 .gobble-build
 .gobble-watch
 Thumbs.db
+/.idea/
+/le_node.iml
