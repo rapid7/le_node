@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/logentries/le_node.svg)](https://travis-ci.org/logentries/le_node)
+[![Build Status](https://travis-ci.org/rapid7/le_node.svg)](https://travis-ci.org/rapid7/le_node)
 
 # le_node: Logentries Client
 
