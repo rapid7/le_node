@@ -14,6 +14,7 @@ var tape     = require('tape');
 var winston  = require('winston');
 var winston1 = require('winston1');
 var winston2 = require('winston2x');
+var ringbuffer = require('../lib/node_modules/ringbuffer.js');
 
 // FAKE TOKEN //////////////////////////////////////////////////////////////////
 
@@ -557,6 +558,21 @@ tape('Socket gets re-opened as needed.', function(t) {
 		}, 500);
 	}, 500);
 
+});
+
+
+tape('RingBuffer buffers and shifts when it is full', function(t) {
+	t.plan(5);
+	t.timeoutAfter(1000);
+
+	var ringBuffer = new ringbuffer.RingBuffer(1);
+	ringBuffer.on('buffer shift', function () {
+		t.pass('Buffer shift event emitted');
+	});
+	t.true(ringBuffer.write('Test log'), 'RingBuffer buffers');
+	t.false(ringBuffer.write('Another test log'), 'RingBuffer shifts');
+	t.equal(ringBuffer.read(), 'Another test log', 'got expected log event');
+	t.equal(0, ringBuffer.records.length, 'No records left in the buffer');
 });
 
 // WINSTON TRANSPORT ///////////////////////////////////////////////////////////
