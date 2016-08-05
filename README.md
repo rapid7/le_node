@@ -86,7 +86,7 @@ accessors, though, and invalid values will be ignored.
    Time to wait between attemps when trying to reach the logentries host. 
    Default: `15 * 60 * 1000`.
 
-### Log Processing Options
+### Log Processing Options`
  - **flatten**: Convert objects into a single-level object where the values of
    interior objects become dot-notation properties of the root object. Defaults
    to `false`. More details on this below.
@@ -108,6 +108,10 @@ accessors, though, and invalid values will be ignored.
    or the host with the port specified.
  - **port**: As above. This will default to 80 if `secure` is false, or 443 if
    it’s true.
+ - **debug**: Setting this to `true will enable debug logging with a default stdout
+  logger.
+ - **debugLogger**: Use this to override default stdout logger. New logger must
+  implement a `log` method.
 
 ## Log Levels
 
