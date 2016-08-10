@@ -17,31 +17,33 @@ export const reconnectBackoffStrategy = 'fibonacci';
 export const inactivityTimeout = 15 * 1000;
 
 export const levels = [
-	'debug',
-	'info',
-	'notice',
-	'warning',
-	'err',
-	'crit',
-	'alert',
-	'emerg'
+  'debug',
+  'info',
+  'notice',
+  'warning',
+  'err',
+  'crit',
+  'alert',
+  'emerg'
 ];
 
 export const bunyanLevels = [
-	'trace',
-	'debug',
-	'info',
-	'warn',
-	'error',
-	'fatal'
+  'trace',
+  'debug',
+  'info',
+  'warn',
+  'error',
+  'fatal'
 ];
 
+export const debug = false;
+
 export const debugLogger = (() => {
-	let timestamp = () => {};
+  const timestamp = () => {
+  };
 
-	timestamp.toString = () => {
-		return "[DEBUG " + (new Date()).toLocaleString() + "] Logentries le_node: ";
-	};
+  timestamp.toString = () =>
+      `[DEBUG ${(new Date()).toLocaleString()}] Logentries le_node: `;
 
-	return { log: console.log.bind(console, '%s', timestamp) };
+  return { log: console.log.bind(console, '%s', timestamp) };
 })();
