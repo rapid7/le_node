@@ -68,8 +68,8 @@ accessors, though, and invalid values will be ignored.
    methods. More details on this below.
  - **minLevel**: The minimum level to actually record logs at. String or Number.
    Defaults to 0.
- - **bufferSize**: The maximum number of log entries that may be queued for
-   sending at a given moment. Default: `100`.
+ - **bufferSize**: The maximum number of log entries that may be queued in the 
+   internal ring buffer for sending at a given moment. Default: `16192`.
  - **secure:** If truthy, uses a tls connection. Default: `false`.
  - **inactivityTimeout:** The time, in milliseconds, that inactivity should warrant
    closing the connection to the host until needed again. Defaults to 15 seconds.
@@ -108,7 +108,7 @@ accessors, though, and invalid values will be ignored.
    or the host with the port specified.
  - **port**: As above. This will default to 80 if `secure` is false, or 443 if
    it’s true.
- - **debug**: Setting this to `true will enable debug logging with a default stdout
+ - **debug**: Setting this to `true` will enable debug logging with a default stdout
   logger.
  - **debugLogger**: Use this to override default stdout logger. New logger must
   implement a `log` method.
@@ -162,6 +162,8 @@ argument and it will be interpretted as the log entry. When used this way, the
 
 ## Events
 
+## Logger
+
 ### `'error'`
 The client is an EventEmitter, so you should (as always) make sure you have a
 listener on `'error'`. Error events can occur when there’s been a problem with
@@ -192,6 +194,21 @@ to be sure any pending logs have finished writing.
 process.on('SIGINT', () => {
    logger.notice({ type: 'server', event: 'shutdown' });
    logger.once('connection drain', () => process.exit());
+});
+```
+
+## RingBuffer
+
+### `'buffer shift'`
+
+Buffer shift event is emitted when the internal buffer is shifted due to reaching `bufferSize`
+of events in the buffer. This event may be listened for security/operations related reasons as
+each time this event is emitted, a log event will be discarded and discarded log event will
+never make it to Logentries.
+
+```javascript
+logger.ringBuffer.on('buffer shift', () => {
+    // page devops or send an email 
 });
 ```
 
@@ -251,19 +268,23 @@ mode, but this means it expects discreet units (one call = one entry), not
 actual objects; you should pass in strings. This is useful if you want to pipe
 stdout, for example.
 
-## Buffer & Connection Issues
+## Buffering
 
-If there’s a problem with the connection, entries will be buffered to a max of
-100 entries by default. After that, error events will be emitted when trying to
-log further. If the buffer drains, normal logging can resume. If `console` is
-true, these log entries will still display there, but they will not make it to
-LogEntries.
+If there’s a problem with the connection (network loss or congestion),
+entries will be buffered in an internal ring buffer to a max of 16192(`bufferSize`)
+entries by default. After that, internal ring buffer will `shift` records
+to keep only last `bufferSize` number of records in memory. A log that indicates the
+buffer was full will be sent to internal logger "once" this happens.
+If `console` is true, these log entries will still display there, but they will
+not make it to LogEntries.
 
 You can adjust the maximum size of the buffer with the `bufferSize` option.
 You’ll want to raise it if you’re dealing with very high volume (either a high
 number of logs per second, or when log entries are unusually long on average).
 Outside of these situations, exceeding the max buffer size is more likely an
 indication of creating logs in a synchronous loop (which seems like a bad idea).
+
+## Connection Handling
 
 If the connection fails, it will keep retrying with a `fibonacci` backoff by default. 
 Connection retry will start with a delay of `reconnectInitialDelay` and the delay between each retry 
