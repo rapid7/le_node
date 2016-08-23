@@ -162,22 +162,14 @@ class Logger extends Writable {
       return connection;
     });
 
-    // Writable is flowing so we can set the bufferWasFull to false.
-    this.on('drain', () => {
-      this.bufferWasFull = false;
-      this.debugLogger.log('Writable drianed.');
-    });
-
     // RingBuffer emits buffer shift event, meaning we are discarding some data!
     this.ringBuffer.on('buffer shift', () => {
-      if (!this.bufferWasFull) {
-        this.debugLogger.log('Buffer is full, will be shifting records until buffer is drained.');
-        this.bufferWasFull = true;
-      }
+      this.debugLogger.log('Buffer is full, will be shifting records until buffer is drained.');
     });
   }
 
   /**
+   * Override Writable _write method.
    * Get the connection promise .then write the next log on the ringBuffer
    * to Logentries connection when its available
    */
@@ -186,7 +178,14 @@ class Logger extends Writable {
       const record = this.ringBuffer.read();
       if (record) {
         conn.write(record);
-        // this.emit('log finished', record);
+        // we are checking the buffer state here just after conn.write()
+        // to make sure the last event is sent to socket.
+        if (this.ringBuffer.isEmpty()) {
+          this.emit('buffer drain');
+          // this event is DEPRECATED - will be removed in next major release.
+          // new users should use 'buffer drain' event instead.
+          this.emit('connection drain');
+        }
       } else {
         this.debugLogger.log('This should not happen. Read from ringBuffer returned null.');
       }
@@ -395,11 +394,6 @@ class Logger extends Writable {
           this.closeConnection();
           this.connection = null;
           this.emit('timed out');
-        });
-
-        connection.on('drain', () => {
-          setImmediate(() => this.emit('connection drain'));
-          this.debugLogger.log('Connection was drained.');
         });
       });
 
@@ -811,7 +805,7 @@ const drainWritableEvent = 'drain';
 const finishWritableEvent = 'finish';
 const pipeWritableEvent = 'pipe';
 const unpipeWritableEvent = 'unpipe';
-const connectionDrainEvent = 'connection drain';
+const bufferDrainEvent = 'buffer drain';
 
 export {
     Logger as default,
@@ -824,5 +818,5 @@ export {
     finishWritableEvent,
     pipeWritableEvent,
     unpipeWritableEvent,
-    connectionDrainEvent
+    bufferDrainEvent
 };
