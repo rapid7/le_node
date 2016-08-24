@@ -582,7 +582,7 @@ tape('RingBuffer buffers and shifts when it is full', function (t) {
   t.true(ringBuffer.write('Test log'), 'RingBuffer buffers');
   t.false(ringBuffer.write('Another test log'), 'RingBuffer shifts');
   t.equal(ringBuffer.read(), 'Another test log', 'got expected log event');
-  t.equal(0, ringBuffer.records.length, 'No records left in the buffer');
+  t.true(ringBuffer.isEmpty(), 'No records left in the buffer');
 });
 
 // WINSTON TRANSPORT

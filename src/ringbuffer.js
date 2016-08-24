@@ -5,6 +5,7 @@ class RingBuffer extends EventEmitter {
     super();
     this.records = [];
     this.limit = limit;
+    this.bufferWasFull = false;
   }
 
   write(log) {
@@ -12,14 +13,22 @@ class RingBuffer extends EventEmitter {
     if (this.records.length > this.limit) {
       this.records.shift();
 
-      this.emit('buffer shift');
+      if (!this.bufferWasFull) {
+        this.emit('buffer shift');
+        this.bufferWasFull = true;
+      }
       return false;
     }
     return true;
   }
 
   read() {
+    this.bufferWasFull = false;
     return this.records.shift();
+  }
+
+  isEmpty() {
+    return this.records.length === 0;
   }
 }
 

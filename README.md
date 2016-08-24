@@ -181,19 +181,20 @@ is inactive for a configurable period of time (see inactivityTimeout); it will
 be reopened when needed again. Disconnection can be either a result of socket inactivity or a network failure.
 
 #### `'drain'`, `'finish'`, `'pipe'`, and `'unpipe'`
-These are events inherited from `Writable`. Note that the drain event here is
-not the one you want to listen for if you’re interested in confirming that all
-pending data has **transmitted** -- for that, listen to `'connection drain'`.
+These are events inherited from `Writable`.
 
 #### `'connection drain'`
-This is the propagated drain event of the current underlying connection stream.
+DEPRECATED. Use `buffer drain` event instead.
+
+#### `'buffer drain'`
+This event is emitted when the underlying ring buffer is fully consumed and becomes empty.
 This can be useful when it’s time for the application to terminate but you want
 to be sure any pending logs have finished writing.
 
 ```javascript
 process.on('SIGINT', () => {
    logger.notice({ type: 'server', event: 'shutdown' });
-   logger.once('connection drain', () => process.exit());
+   logger.once('buffer drain', () => process.exit());
 });
 ```
 
