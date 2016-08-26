@@ -718,7 +718,7 @@ class Logger extends Writable {
         setImmediate(cb.bind(null, null, true));
       }
 
-      static get name() {
+      get name() {
         return 'logentries';
       }
 
