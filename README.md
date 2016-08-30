@@ -194,7 +194,13 @@ to be sure any pending logs have finished writing.
 ```javascript
 process.on('SIGINT', () => {
    logger.notice({ type: 'server', event: 'shutdown' });
-   logger.once('buffer drain', () => process.exit());
+   logger.once('buffer drain', () => {
+        logger.end(() => {
+            setTimeout(() => {
+                process.exit(0);
+            }, 2000); // this delay gives sometime for the underlying connection to flush its queue
+        });
+   });
 });
 ```
 

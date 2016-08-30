@@ -197,16 +197,6 @@ class Logger extends Writable {
     });
   }
 
-  /**
-   * Stop reconnection along with its running connection(if any) and end the writable stream.
-   */
-  end() {
-    // invoke disconnect of reconnection so any running connection
-    // will be destroyed and we will stop reconnecting.
-    this.reconnection.disconnect();
-    super.end(...arguments);
-  }
-
   setDefaultEncoding() { /* no. */
   }
 
