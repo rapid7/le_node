@@ -166,6 +166,10 @@ class Logger extends Writable {
     this.ringBuffer.on('buffer shift', () => {
       this.debugLogger.log('Buffer is full, will be shifting records until buffer is drained.');
     });
+
+    this.on('buffer drain', () => {
+      this.debugLogger.log('RingBuffer drained.');
+    });
   }
 
   /**
@@ -177,14 +181,19 @@ class Logger extends Writable {
     this.connection.then(conn => {
       const record = this.ringBuffer.read();
       if (record) {
-        conn.write(record);
         // we are checking the buffer state here just after conn.write()
         // to make sure the last event is sent to socket.
         if (this.ringBuffer.isEmpty()) {
-          this.emit('buffer drain');
-          // this event is DEPRECATED - will be removed in next major release.
-          // new users should use 'buffer drain' event instead.
-          this.emit('connection drain');
+          conn.write(record, () => {
+            process.nextTick(() => {
+              this.emit('buffer drain');
+              // this event is DEPRECATED - will be removed in next major release.
+              // new users should use 'buffer drain' event instead.
+              this.emit('connection drain');
+            });
+          });
+        } else {
+          conn.write(record);
         }
       } else {
         this.debugLogger.log('This should not happen. Read from ringBuffer returned null.');
@@ -309,6 +318,7 @@ class Logger extends Writable {
   closeConnection() {
     this.debugLogger.log('Closing retry mechanism along with its connection.');
     if (!this.reconnection) {
+      this.debugLogger.log('No reconnection instance found. Returning.');
       return;
     }
     // this makes sure retry mechanism and connection will be closed.
@@ -373,7 +383,6 @@ class Logger extends Writable {
       this.reconnection.on('connect', (connection) => {
         this.debugLogger.log('Connected');
         this.emit('connected');
-        resolve(connection);
 
         // connection listeners
         connection.on('timeout', () => {
@@ -385,6 +394,7 @@ class Logger extends Writable {
           this.connection = null;
           this.emit('timed out');
         });
+        resolve(connection);
       });
 
       this.reconnection.on('reconnect', (n, delay) => {
