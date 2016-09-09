@@ -187,7 +187,7 @@ These are events inherited from `Writable`.
 DEPRECATED. Use `buffer drain` event instead.
 
 #### `'buffer drain'`
-This event is emitted when the underlying ring buffer is fully consumed and becomes empty.
+This event is emitted when the underlying ring buffer is fully consumed and Socket.write callback called.
 This can be useful when it’s time for the application to terminate but you want
 to be sure any pending logs have finished writing.
 
@@ -195,11 +195,10 @@ to be sure any pending logs have finished writing.
 process.on('SIGINT', () => {
    logger.notice({ type: 'server', event: 'shutdown' });
    logger.once('buffer drain', () => {
-        logger.end(() => {
-            setTimeout(() => {
-                process.exit(0);
-            }, 2000); // this delay gives sometime for the underlying connection to flush its queue
-        });
+      logger.closeConnection();
+      logger.on('disconnected', () => {
+        process.exit();
+      });
    });
 });
 ```
