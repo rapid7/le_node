@@ -124,6 +124,7 @@ class Logger extends Writable {
     this.minLevel = opts.minLevel;
     this.replacer = opts.replacer;
     this.inactivityTimeout = opts.inactivityTimeout || defaults.inactivityTimeout;
+    this.disableTimeout = opts.disableTimeout;
     this.token = opts.token;
     this.reconnectInitialDelay = opts.reconnectInitialDelay || defaults.reconnectInitialDelay;
     this.reconnectMaxDelay = opts.reconnectMaxDelay || defaults.reconnectMaxDelay;
@@ -158,7 +159,9 @@ class Logger extends Writable {
       } else {
         connection = net.connect.apply(null, args);
       }
-      connection.setTimeout(opts.inactivityTimeout || defaults.inactivityTimeout);
+      if(!opts.disableTimeout) { 
+        connection.setTimeout(opts.inactivityTimeout || defaults.inactivityTimeout); 
+      }
       return connection;
     });
 
@@ -637,6 +640,14 @@ class Logger extends Writable {
 
   set levels(val) {
     this._levels = val;
+  }
+
+  get disableTimeout() {
+    return this._disableTimeout;
+  }
+
+  set disableTimeout(val) {
+    this._disableTimeout = !!val;
   }
 
   // Deprecated (to support migrants from le_node)
