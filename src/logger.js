@@ -159,8 +159,8 @@ class Logger extends Writable {
       } else {
         connection = net.connect.apply(null, args);
       }
-      if(!opts.disableTimeout) { 
-        connection.setTimeout(opts.inactivityTimeout || defaults.inactivityTimeout); 
+      if (!opts.disableTimeout) {
+        connection.setTimeout(opts.inactivityTimeout || defaults.inactivityTimeout);
       }
       return connection;
     });
