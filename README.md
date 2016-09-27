@@ -73,6 +73,8 @@ accessors, though, and invalid values will be ignored.
  - **secure:** If truthy, uses a tls connection. Default: `false`.
  - **inactivityTimeout:** The time, in milliseconds, that inactivity should warrant
    closing the connection to the host until needed again. Defaults to 15 seconds.
+ - **disableTimeout**: Sets the socket timeout to 0. Should not be used with 
+   inactivityTimeout option.
  - **reconnectInitialDelay**: Initial wait time in milliseconds while reconnecting. 
    Default: `1000
  - **reconnectMaxDelay**: Maximum wait time in milliseconds while reconnecting.
