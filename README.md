@@ -194,7 +194,6 @@ This can be useful when it’s time for the application to terminate but you wan
 to be sure any pending logs have finished writing.
 
 ```javascript
-process.on('SIGINT', () => {
    logger.notice({ type: 'server', event: 'shutdown' });
    logger.once('buffer drain', () => {
       logger.closeConnection();
@@ -202,7 +201,6 @@ process.on('SIGINT', () => {
         process.exit();
       });
    });
-});
 ```
 
 ### RingBuffer Events
