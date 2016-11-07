@@ -76,7 +76,7 @@ accessors, though, and invalid values will be ignored.
  - **disableTimeout**: Sets the socket timeout to 0. Should not be used with 
    inactivityTimeout option.
  - **reconnectInitialDelay**: Initial wait time in milliseconds while reconnecting. 
-   Default: `1000
+   Default: `1000`
  - **reconnectMaxDelay**: Maximum wait time in milliseconds while reconnecting.
    Default: `15 * 1000`
  - **reconnectBackoffStrategy**: Backoff strategy to be used while trying to reconnect.
