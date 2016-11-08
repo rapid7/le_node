@@ -570,6 +570,39 @@ tape('Socket gets re-opened as needed.', function (t) {
 
 });
 
+tape('Socket is not closed after inactivity timeout when buffer is not empty.', function (t) {
+  t.plan(3);
+  t.timeoutAfter(1000);
+  const lvl = defaults.levels[3];
+  const tkn = x;
+  const logger = new Logger({ token: x , inactivityTimeout: 300});
+
+  const mock = mitm();
+
+  mock.on('connection', function (socket, opts) {
+    socket.once('data', function (buffer) {
+      const log1 = buffer.toString();
+      const expected1 = [tkn, lvl, 'first log' + '\n'].join(' ');
+      t.equals(log1, expected1, 'first log received.');
+    });
+
+    logger.on('timed out', function () {
+      t.true(logger.drained, 'timeout event triggered and logger was drained.');
+    });
+
+    setTimeout(function () {
+      logger.log(lvl, 'second log');
+      socket.once('data', function (buffer) {
+        const log2 = buffer.toString();
+        const expected2 = [tkn, lvl, 'second log' + '\n'].join(' ');
+        t.equals(log2, expected2, 'log before inactivity timeout received.');
+      });
+    }, 301);
+    mock.disable();
+  });
+  logger.log(lvl, 'first log');
+});
+
 
 tape('RingBuffer buffers and shifts when it is full', function (t) {
   t.plan(5);

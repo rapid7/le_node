@@ -21,6 +21,18 @@ import BunyanStream from './bunyanstream';
 const newline = /\n/g;
 const tokenPattern = /[a-f\d]{8}-([a-f\d]{4}-){3}[a-f\d]{12}/;
 
+// exposed Logger events
+const errorEvent = 'error';
+const logEvent = 'log';
+const connectedEvent = 'connected';
+const disconnectedEvent = 'disconnected';
+const timeoutEvent = 'timed out';
+const drainWritableEvent = 'drain';
+const finishWritableEvent = 'finish';
+const pipeWritableEvent = 'pipe';
+const unpipeWritableEvent = 'unpipe';
+const bufferDrainEvent = 'buffer drain';
+
 /**
  * Append log string to provided token.
  *
@@ -170,8 +182,23 @@ class Logger extends Writable {
       this.debugLogger.log('Buffer is full, will be shifting records until buffer is drained.');
     });
 
-    this.on('buffer drain', () => {
+    this.on(bufferDrainEvent, () => {
       this.debugLogger.log('RingBuffer drained.');
+      this.drained = true;
+    });
+
+    this.on(timeoutEvent, () => {
+      if (this.drained) {
+        this.debugLogger.log(
+            `Socket was inactive for ${this.inactivityTimeout / 1000} seconds. Destroying.`);
+        this.closeConnection();
+      } else {
+        this.debugLogger.log('Inactivity timeout event emitted but buffer was not drained.');
+        this.once(bufferDrainEvent, () => {
+          this.debugLogger.log('Buffer drain event emitted for inactivity timeout.');
+          this.closeConnection();
+        });
+      }
     });
   }
 
@@ -181,6 +208,7 @@ class Logger extends Writable {
    * to Logentries connection when its available
    */
   _write(ch, enc, cb) {
+    this.drained = false;
     this.connection.then(conn => {
       const record = this.ringBuffer.read();
       if (record) {
@@ -189,7 +217,7 @@ class Logger extends Writable {
         if (this.ringBuffer.isEmpty()) {
           conn.write(record, () => {
             process.nextTick(() => {
-              this.emit('buffer drain');
+              this.emit(bufferDrainEvent);
               // this event is DEPRECATED - will be removed in next major release.
               // new users should use 'buffer drain' event instead.
               this.emit('connection drain');
@@ -203,7 +231,7 @@ class Logger extends Writable {
       }
       cb();
     }).catch(err => {
-      this.emit('error', err);
+      this.emit(errorEvent, err);
       this.debugLogger.log(`Error: ${err}`);
       cb();
     });
@@ -233,7 +261,7 @@ class Logger extends Writable {
 
       // If lvl is present, it must be recognized
       if (!modifiedLevel && modifiedLevel !== 0) {
-        this.emit('error', new LogentriesError(text.unknownLevel(modifiedLevel)));
+        this.emit(errorEvent, new LogentriesError(text.unknownLevel(modifiedLevel)));
         return;
       }
 
@@ -248,7 +276,7 @@ class Logger extends Writable {
       if (modifiedLog.length) {
         for (const $modifiedLog of modifiedLog) this.log(modifiedLevel, $modifiedLog);
       } else {
-        this.emit('error', new LogentriesError(text.noLogMessage()));
+        this.emit(errorEvent, new LogentriesError(text.noLogMessage()));
       }
       return;
     }
@@ -272,7 +300,7 @@ class Logger extends Writable {
       modifiedLog = this._serialize(modifiedLog);
 
       if (!modifiedLog) {
-        this.emit('error', new LogentriesError(text.serializedEmpty()));
+        this.emit(errorEvent, new LogentriesError(text.serializedEmpty()));
         return;
       }
 
@@ -284,7 +312,7 @@ class Logger extends Writable {
       if (safeLevel) delete modifiedLog[safeLevel];
     } else {
       if (_.isEmpty(modifiedLog)) {
-        this.emit('error', new LogentriesError(text.noLogMessage()));
+        this.emit(errorEvent, new LogentriesError(text.noLogMessage()));
         return;
       }
 
@@ -305,7 +333,7 @@ class Logger extends Writable {
       }
     }
 
-    this.emit('log', modifiedLog);
+    this.emit(logEvent, modifiedLog);
 
     // if RingBuffer.write returns false, don't create any other write request for
     // the writable stream to avoid memory leak this means there are already 'bufferSize'
@@ -326,6 +354,7 @@ class Logger extends Writable {
     }
     // this makes sure retry mechanism and connection will be closed.
     this.reconnection.disconnect();
+    this.connection = null;
   }
 
   // Private methods
@@ -385,17 +414,11 @@ class Logger extends Writable {
       // reconnection listeners
       this.reconnection.on('connect', (connection) => {
         this.debugLogger.log('Connected');
-        this.emit('connected');
+        this.emit(connectedEvent);
 
         // connection listeners
         connection.on('timeout', () => {
-          // we owe a lot to inactivity timeout handling with regards to clearing
-          // unwanted opened connections hanging around.
-          this.debugLogger.log(
-              `Socket was inactive for ${this.inactivityTimeout / 1000} seconds. Destroying.`);
-          this.closeConnection();
-          this.connection = null;
-          this.emit('timed out');
+          this.emit(timeoutEvent);
         });
         resolve(connection);
       });
@@ -409,7 +432,7 @@ class Logger extends Writable {
       this.reconnection.once('disconnect', () => {
         this.debugLogger.log('Socket was disconnected');
         this.connection = null;
-        this.emit('disconnected');
+        this.emit(disconnectedEvent);
       });
 
       this.reconnection.on('error', (err) => {
@@ -805,18 +828,6 @@ const winston2 = requirePeer('winston2x', { optional: true });
 
 if (winston1) Logger.provisionWinston(winston1);
 if (winston2) Logger.provisionWinston(winston2);
-
-// exposed Logger events
-const errorEvent = 'error';
-const logEvent = 'log';
-const connectedEvent = 'connected';
-const disconnectedEvent = 'disconnected';
-const timeoutEvent = 'timed out';
-const drainWritableEvent = 'drain';
-const finishWritableEvent = 'finish';
-const pipeWritableEvent = 'pipe';
-const unpipeWritableEvent = 'unpipe';
-const bufferDrainEvent = 'buffer drain';
 
 export {
     Logger as default,
