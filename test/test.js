@@ -586,7 +586,7 @@ tape('Socket is not closed after inactivity timeout when buffer is not empty.', 
       t.equals(log1, expected1, 'first log received.');
     });
 
-    logger.on('timed out', function () {
+    logger.once('timed out', function () {
       t.true(logger.drained, 'timeout event triggered and logger was drained.');
     });
 
@@ -597,7 +597,7 @@ tape('Socket is not closed after inactivity timeout when buffer is not empty.', 
         const expected2 = [tkn, lvl, 'second log' + '\n'].join(' ');
         t.equals(log2, expected2, 'log before inactivity timeout received.');
       });
-    }, 301);
+    }, 299);
     mock.disable();
   });
   logger.log(lvl, 'first log');
