@@ -697,6 +697,7 @@ class Logger extends Writable {
       constructor(opts) {
         super(opts);
         this.json = opts.json;
+        this.name = 'logentries';
 
         const transportOpts = _.clone(opts || {});
 
@@ -750,10 +751,6 @@ class Logger extends Writable {
         }
 
         setImmediate(cb.bind(null, null, true));
-      }
-
-      get name() {
-        return 'logentries';
       }
 
       get tempLevel() {
