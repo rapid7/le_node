@@ -739,7 +739,7 @@ class Logger extends Writable {
           this.logger.log(lvl, message);
         } else {
           let message = msg;
-          if (!_.isEmpty(meta)) {
+          if (!_.isEmpty(meta) || _.isError(meta)) {
             if (_.isString(message)) {
               message += ` ${this.logger.serialize(meta)}`;
             } else if (_.isObject(message)) {
