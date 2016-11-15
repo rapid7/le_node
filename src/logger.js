@@ -697,6 +697,7 @@ class Logger extends Writable {
       constructor(opts) {
         super(opts);
         this.json = opts.json;
+        this.name = 'logentries';
 
         const transportOpts = _.clone(opts || {});
 
@@ -738,7 +739,7 @@ class Logger extends Writable {
           this.logger.log(lvl, message);
         } else {
           let message = msg;
-          if (!_.isEmpty(meta)) {
+          if (!_.isEmpty(meta) || _.isError(meta)) {
             if (_.isString(message)) {
               message += ` ${this.logger.serialize(meta)}`;
             } else if (_.isObject(message)) {
@@ -750,10 +751,6 @@ class Logger extends Writable {
         }
 
         setImmediate(cb.bind(null, null, true));
-      }
-
-      get name() {
-        return 'logentries';
       }
 
       get tempLevel() {
