@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import semver from 'semver';
+import os from 'os';
 import net from 'net';
 import tls from 'tls';
 import urlUtil from 'url';
@@ -127,6 +128,7 @@ class Logger extends Writable {
     this.console = opts.console;
     this.withLevel = 'withLevel' in opts ? opts.withLevel : true;
     this.withStack = opts.withStack;
+    this.withHostname = opts.withHostname || false;
     this.timestamp = opts.timestamp || false;
 
     // string or numeric options
@@ -286,6 +288,7 @@ class Logger extends Writable {
     if (_.isObject(modifiedLog)) {
       let safeTime;
       let safeLevel;
+      let safeHost;
 
       if (this.timestamp) {
         safeTime = getSafeProp(modifiedLog, 'time');
@@ -295,6 +298,11 @@ class Logger extends Writable {
       if (this.withLevel && lvlName) {
         safeLevel = getSafeProp(modifiedLog, 'level');
         modifiedLog[safeLevel] = lvlName;
+      }
+
+      if (this.withHostname) {
+        safeHost = getSafeProp(modifiedLog, 'host');
+        modifiedLog[safeHost] = os.hostname();
       }
 
       modifiedLog = this._serialize(modifiedLog);
@@ -310,6 +318,7 @@ class Logger extends Writable {
 
       if (safeTime) delete modifiedLog[safeTime];
       if (safeLevel) delete modifiedLog[safeLevel];
+      if (safeHost) delete modifiedLog[safeHost];
     } else {
       if (_.isEmpty(modifiedLog)) {
         this.emit(errorEvent, new LogentriesError(text.noLogMessage()));
@@ -320,6 +329,10 @@ class Logger extends Writable {
 
       if (this.withLevel && lvlName) {
         modifiedLog.unshift(lvlName);
+      }
+
+      if (this.withHostname) {
+        modifiedLog.unshift(os.hostname());
       }
 
       if (this.timestamp) {
@@ -638,6 +651,14 @@ class Logger extends Writable {
 
   set timestamp(val) {
     this._timestamp = !!val;
+  }
+
+  get withHostname() {
+    return this._withHostname;
+  }
+
+  set withHostname(val) {
+    this._withHostname = val;
   }
 
   get withLevel() {

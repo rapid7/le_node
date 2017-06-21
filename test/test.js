@@ -163,6 +163,24 @@ tape('Logger allows specification of minLevel at construction', function (t) {
 
 });
 
+
+tape('Logger allows specification of withHostname at construction', function (t) {
+
+  const logger1 = new Logger({ token: x, withHostname: true });
+
+  t.equal(logger1.withHostname, true, 'withHostname');
+
+  const logger2 = new Logger({ token: x });
+
+  t.equal(logger2.withHostname, false, 'withHostname');
+
+  t.end();
+
+});
+
+
+
+
 // CUSTOM JSON SERIALIZATION
 
 tape('Error objects are serialized nicely.', function (t) {
@@ -464,6 +482,45 @@ tape('Non-JSON logs may carry timestamp.', function (t) {
 
   logger[lvl]('test');
 });
+
+
+tape('Non-JSON logs may carry Hostname.', function (t) {
+  t.plan(1);
+  t.timeoutAfter(2000);
+
+  mockTest(function (data) {
+    t.true(pattern.test(data), 'matched');
+
+  });
+  const os = require('os');
+  const lvl = defaults.levels[3];
+  const tkn = x;
+  const pattern = new RegExp('^' + x +' ' + os.hostname() + ' \\w+ test\\n$'
+  );
+
+  const logger = new Logger({ token: tkn, withHostname: true });
+
+  logger[lvl]('test');
+});
+
+
+tape('JSON logs may carry Hostname.', function (t) {
+  t.plan(1);
+  t.timeoutAfter(2000);
+
+  mockTest(function (data) {
+    const log = JSON.parse(data.substr(37));
+    t.true(log.host, 'has property');
+  });
+  const os = require('os');
+  const lvl = defaults.levels[3];
+  const tkn = x;
+
+  const logger = new Logger({ token: tkn, withHostname: true });
+
+  logger[lvl]({msg: "Testing!"});
+});
+
 
 tape('JSON logs match expected pattern.', function (t) {
   t.timeoutAfter(2000);
