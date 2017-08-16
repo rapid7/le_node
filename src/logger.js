@@ -5,7 +5,6 @@ import net from 'net';
 import tls from 'tls';
 import urlUtil from 'url';
 import { Writable } from 'stream';
-import codependency from 'codependency';
 import reconnectCore from 'reconnect-core';
 import * as defaults from './defaults';
 import * as levelUtil from './levels';

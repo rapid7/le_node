@@ -1,5 +1,5 @@
 {
-  "name": "le_node",
+  "name": "@trint/le_node",
   "version": "1.7.1",
   "description": "Logentries client for node; use with or without Winston or Bunyan.",
   "keywords": [
