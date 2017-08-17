@@ -140,6 +140,7 @@ class Logger extends Writable {
     this.inactivityTimeout = opts.inactivityTimeout || defaults.inactivityTimeout;
     this.disableTimeout = opts.disableTimeout;
     this.token = opts.token;
+    this.reconnectFailAfter = opts.reconnectFailAfter || defaults.reconnectFailAfter;
     this.reconnectInitialDelay = opts.reconnectInitialDelay || defaults.reconnectInitialDelay;
     this.reconnectMaxDelay = opts.reconnectMaxDelay || defaults.reconnectMaxDelay;
     this.reconnectBackoffStrategy =
@@ -413,7 +414,7 @@ class Logger extends Writable {
       initialDelay: this.reconnectInitialDelay,
       maxDelay: this.reconnectMaxDelay,
       strategy: this.reconnectBackoffStrategy,
-      failAfter: Infinity,
+      failAfter: this.reconnectFailAfter,
       randomisationFactor: 0,
       immediate: false
     });
@@ -593,6 +594,14 @@ class Logger extends Writable {
 
   set reconnectInitialDelay(val) {
     this._reconnectInitialDelay = val;
+  }
+
+  get reconnectFailAfter() {
+    return this._reconnectFailAfter;
+  }
+
+  set reconnectFailAfter(val) {
+    this._reconnectFailAfter = val;
   }
 
   get reconnectBackoffStrategy() {

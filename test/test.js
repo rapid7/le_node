@@ -3,6 +3,7 @@
 'use strict';
 
 const _ = require('lodash');
+const EventEmitter = require('events');
 const bunyan = require('bunyan');
 const defaults = require('../lib/defaults.js');
 const levels = require('../lib/levels.js');
@@ -660,6 +661,40 @@ tape('Socket is not closed after inactivity timeout when buffer is not empty.', 
   logger.log(lvl, 'first log');
 });
 
+tape('Socket will not reconnect indefinitely when fail after is configured', function (t) {
+  t.plan(4);
+  t.timeoutAfter(1000);
+  const lvl = defaults.levels[3];
+  const logger = new Logger({ token: x, reconnectFailAfter: 3, reconnectInitialDelay: 100, reconnectMaxDelay: 101 });
+
+  const mock = new mitm();
+  let retryCounter = 0;
+
+  mock.connect = function() {
+    const emitter = new EventEmitter();
+
+    // mock properties
+    emitter.setTimeout = _.noop;
+    emitter.server = new EventEmitter();
+
+    t.true(retryCounter <= 3, `retry ${retryCounter}`);
+    retryCounter += 1;
+
+    setTimeout(() => {
+      emitter.emit('error', new Error('connection failed'))
+    }, 0);
+
+    if (retryCounter > 3) {
+      mock.disable();
+    }
+
+    return emitter;
+  };
+
+  mock.enable();
+
+  logger.log(lvl, 'test log');
+});
 
 tape('RingBuffer buffers and shifts when it is full', function (t) {
   t.plan(5);
