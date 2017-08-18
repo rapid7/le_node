@@ -16,3 +16,9 @@ export class BadOptionsError extends LogentriesError {
     this.options = opts;
   }
 }
+
+export class ReconnectFailedError extends LogentriesError {
+  constructor(msg = 'Reconnect failed') {
+    super(msg);
+  }
+}

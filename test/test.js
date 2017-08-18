@@ -662,18 +662,39 @@ tape('Socket is not closed after inactivity timeout when buffer is not empty.', 
 });
 
 tape('Socket will not reconnect indefinitely when fail after is configured', function (t) {
-  t.plan(4);
+  t.plan(5);
   t.timeoutAfter(1000);
   const lvl = defaults.levels[3];
+  const tkn = x;
   const logger = new Logger({ token: x, reconnectFailAfter: 3, reconnectInitialDelay: 100, reconnectMaxDelay: 101 });
 
   const mock = new mitm();
   let retryCounter = 0;
 
+  const origConnect = mock.connect;
+
+  const sendMoreLogs = () => {
+    mock.connect = origConnect;
+
+    mock.on('connection', (socket) => {
+      socket.once('data', (buffer) => {
+        const log = buffer.toString();
+        const expectedLog = [tkn, lvl, 'other log' + '\n'].join(' ');
+        t.equals(log, expectedLog, 'log received.');
+        mock.disable();
+      });
+    });
+
+    logger.log(lvl, 'other log');
+  };
+
+  logger.once('buffer drain', sendMoreLogs);
+
   mock.connect = function() {
     const emitter = new EventEmitter();
 
     // mock properties
+    emitter.end = _.noop;
     emitter.setTimeout = _.noop;
     emitter.server = new EventEmitter();
 
@@ -684,16 +705,13 @@ tape('Socket will not reconnect indefinitely when fail after is configured', fun
       emitter.emit('error', new Error('connection failed'))
     }, 0);
 
-    if (retryCounter > 3) {
-      mock.disable();
-    }
-
     return emitter;
   };
 
   mock.enable();
 
-  logger.log(lvl, 'test log');
+  logger.log(lvl, 'test log 1');
+  logger.log(lvl, 'test log 2');
 });
 
 tape('RingBuffer buffers and shifts when it is full', function (t) {
