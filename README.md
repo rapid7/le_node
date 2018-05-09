@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/rapid7/le_node.svg)](https://travis-ci.org/rapid7/le_node)
 
+# Using InsightOps?
+Please use our updated [library](https://github.com/rapid7/r7insight_node) which supports specifying region to send your log data to.
+
 # le_node: Logentries Client
 
 Allows you to send logs to your [logentries](https://www.logentries.com) account
