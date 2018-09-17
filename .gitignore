@@ -1,6 +1,6 @@
 *.log
 /node_modules
-/lib
+
 .gobble
 .gobble-build
 .gobble-watch
