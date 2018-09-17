@@ -1,5 +1,11 @@
 [![Build Status](https://travis-ci.org/rapid7/le_node.svg)](https://travis-ci.org/rapid7/le_node)
 
+# HOMEIS Changes:
+The official package which is not maintained had an issue that caused webpack to crush.
+https://github.com/webpack/webpack/issues/196
+
+Issue was with codependency package.
+
 # Using InsightOps?
 Please use our updated [library](https://github.com/rapid7/r7insight_node) which supports specifying region to send your log data to.
 
