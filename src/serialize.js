@@ -49,7 +49,7 @@ const flat = (serialize, arraysToo) =>
         const newTarget = target;
         if (!_.isObject(val)) {
           newTarget[joinedKey] = val;
-        } else if (!arraysToo && _.isArray(val)) {
+        } else if (!arraysToo && Array.isArray(val)) {
           newTarget[joinedKey] = val.map(newVal => {
             if (!_.isObject(newVal)) return newVal;
 

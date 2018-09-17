@@ -74,7 +74,7 @@ export const normalize = (opts) => {
     return defaults.levels.slice();
   }
 
-  custom = _.isArray(custom) ? normArr(custom, opts) : normObj(custom, opts);
+  custom = Array.isArray(custom) ? normArr(custom, opts) : normObj(custom, opts);
 
   const levels = defaults.levels.map((lvl, i) => custom[i] || lvl);
 

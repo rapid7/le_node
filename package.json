@@ -44,10 +44,8 @@
   },
   "dependencies": {
     "babel-runtime": "6.6.1",
-    "codependency": "0.1.4",
     "json-stringify-safe": "5.0.1",
     "lodash": "3.9.3",
-    "semver": "5.1.0",
     "reconnect-core": "1.3.0"
   },
   "devDependencies": {
@@ -73,14 +71,6 @@
     "mitm": "1.3.2",
     "npm": "3.8.2",
     "tap-spec": "3.0.0",
-    "tape": "4.0.0",
-    "winston": "1.0.0",
-    "winston1": "1.1.2",
-    "winston2x": "2.1.1"
-  },
-  "optionalPeerDependencies": {
-    "winston": "*",
-    "winston1": "*",
-    "winston2x": "*"
+    "tape": "4.0.0"
   }
 }

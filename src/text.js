@@ -62,8 +62,4 @@ export default {
   'The `level` method is deprecated. Use the `minLevel` property, ' +
   'which allows specifying level by either the name or the index.',
 
-  deprecatedWinstonMethod: () =>
-  'The `winston` method is deprecated. Winston was automatically ' +
-  'provisioned with a Logentries transport as soon as you `require()`d ' +
-  'this module.'
 };

@@ -1,11 +1,9 @@
 import _ from 'lodash';
-import semver from 'semver';
 import os from 'os';
 import net from 'net';
 import tls from 'tls';
 import urlUtil from 'url';
 import { Writable } from 'stream';
-import codependency from 'codependency';
 import reconnectCore from 'reconnect-core';
 import * as defaults from './defaults';
 import * as levelUtil from './levels';
@@ -72,9 +70,6 @@ const getSafeProp = (log, prop) => {
   }
   return safeProp;
 };
-
-const requirePeer = codependency.register(module);
-
 
 /**
  * Logger class that handles parsing of logs and sending logs to Logentries.
@@ -274,7 +269,7 @@ class Logger extends Writable {
     }
 
     // If log is an array, it is treated as a collection of log events
-    if (_.isArray(modifiedLog)) {
+    if (Array.isArray(modifiedLog)) {
       if (modifiedLog.length) {
         for (const $modifiedLog of modifiedLog) this.log(modifiedLevel, $modifiedLog);
       } else {
@@ -700,123 +695,6 @@ class Logger extends Writable {
     if (~this.levels.indexOf(name)) this.minLevel = name;
   }
 
-  // static methods
-  static winston() {
-    console.warn(text.deprecatedWinstonMethod());
-  }
-
-  /**
-   * Prepare the winston transport
-   * @param winston
-   */
-  static provisionWinston(winston) {
-    if (winston.transports.Logentries) return;
-
-    const Transport = winston.Transport;
-
-    class LogentriesTransport extends Transport {
-      constructor(opts) {
-        super(opts);
-        this.json = opts.json;
-        this.name = 'logentries';
-
-        const transportOpts = _.clone(opts || {});
-
-        transportOpts.minLevel =
-            transportOpts.minLevel || transportOpts.level || this.tempLevel || 0;
-
-        transportOpts.levels = transportOpts.levels || winston.levels;
-        if (semver.satisfies(winston.version, '>=2.0.0')) {
-          // Winston and Logengries levels are reversed
-          // ('error' level is 0 for Winston and 5 for Logentries)
-          // If the user provides custom levels we assue they are
-          // using winston standard
-          const levels = transportOpts.levels;
-          const values = _.values(levels).reverse();
-          transportOpts.levels = {};
-          _.keys(levels).forEach((k, i) => {
-            transportOpts.levels[k] = values[i];
-          });
-        }
-
-        this.tempLevel = null;
-        this.logger = new Logger(transportOpts);
-        this.logger.on('error', err => this.emit(err));
-      }
-
-      log(lvl, msg, meta, cb) {
-        if (this.json) {
-          const message = {
-            message: msg
-          };
-          if (!_.isEmpty(meta)) {
-            if (_.isObject(meta)) {
-              _.defaults(message, meta);
-            } else {
-              message.meta = meta;
-            }
-          }
-
-          this.logger.log(lvl, message);
-        } else {
-          let message = msg;
-          if (!_.isEmpty(meta) || _.isError(meta)) {
-            if (_.isString(message)) {
-              message += ` ${this.logger.serialize(meta)}`;
-            } else if (_.isObject(message)) {
-              message[getSafeProp(message, 'meta')] = meta;
-            }
-          }
-
-          this.logger.log(lvl, message);
-        }
-
-        setImmediate(cb.bind(null, null, true));
-      }
-
-      get tempLevel() {
-        return this._tempLevel;
-      }
-
-      set tempLevel(val) {
-        this._tempLevel = val;
-      }
-
-      get logger() {
-        return this._logger;
-      }
-
-      set logger(obj) {
-        this._logger = obj;
-      }
-
-      get level() {
-        const [, lvlName] =
-            this.logger.toLevel(this.logger.minLevel);
-        return lvlName;
-      }
-
-      set level(val) {
-        if (!this.logger) {
-          this.tempLevel = val;
-        } else {
-          this.logger.minLevel = val;
-        }
-      }
-
-      get levels() {
-        return this.logger.levels.reduce((acc, lvlName, lvlNum) => {
-          const newAcc = acc;
-          newAcc[lvlName] = lvlNum;
-          return newAcc;
-        }, {});
-      }
-    }
-
-    /* eslint no-param-reassign: ["error", { "props": false }] */
-    winston.transports.Logentries = LogentriesTransport;
-  }
-
   /**
    * Prepare a BunyanStream.
    * @param opts
@@ -834,18 +712,6 @@ class Logger extends Writable {
     return { level, name, stream, type };
   }
 }
-
-// provision winston
-const winston = requirePeer('winston', { optional: true });
-
-if (winston) Logger.provisionWinston(winston);
-
-// Provision too the winston static versions for testing/development purposes
-const winston1 = requirePeer('winston1', { optional: true });
-const winston2 = requirePeer('winston2x', { optional: true });
-
-if (winston1) Logger.provisionWinston(winston1);
-if (winston2) Logger.provisionWinston(winston2);
 
 export {
     Logger as default,
