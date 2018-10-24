@@ -41,7 +41,7 @@ const flat = (serialize, arraysToo) =>
       const serializedObj = JSON.parse(serialize(obj));
       if (!_.isObject(serializedObj)) return serializedObj;
 
-      const flatObj = _.reduce(serializedObj, function _flat(target, val, key) {
+      const flatObj = _.reduce(serializedObj, _.bind(function _flat(target, val, key) {
         const keyContext = this.slice();
         keyContext.push(key);
 
@@ -53,14 +53,14 @@ const flat = (serialize, arraysToo) =>
           newTarget[joinedKey] = val.map(newVal => {
             if (!_.isObject(newVal)) return newVal;
 
-            return _.reduce(newVal, _flat, {}, []);
+            return _.reduce(newVal, _.bind(_flat, []), {});
           });
         } else {
-          _.reduce(val, _flat, newTarget, keyContext);
+          _.reduce(val, _.bind(_flat, keyContext), newTarget);
         }
 
         return newTarget;
-      }, {}, []);
+      }, []), {});
 
       return jsonSS(flatObj);
     };
