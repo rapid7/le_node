@@ -79,7 +79,7 @@ export const normalize = (opts) => {
   const levels = defaults.levels.map((lvl, i) => custom[i] || lvl);
 
   const duplicates =
-      _(levels).countBy().pick(count => count > 1)
+      _(levels).countBy().pickBy(count => count > 1)
           .keys()
           .value();
 
