@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.org/rapid7/le_node.svg)](https://travis-ci.org/rapid7/le_node)
 
-# Using InsightOps?
-Please use our updated [library](https://github.com/rapid7/r7insight_node) which supports specifying region to send your log data to.
+# DEPRECATED
+
+`le_node` has been deprecated in favour of [`r7insight_node`](https://github.com/rapid7/r7insight_node) which includes additional functionality such as the ability to specify the region to send your log data to. Please use this new library instead. New issues with the old library will no longer be addressed.
 
 # le_node: Logentries Client
 
