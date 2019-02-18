@@ -2,7 +2,7 @@
 
 'use strict';
 
-const _ = require('lodash');
+const { noop, isNull, isFunction, isObject } = require('lodash');
 const bunyan = require('bunyan');
 const defaults = require('../lib/defaults.js');
 const levels = require('../lib/levels.js');
@@ -23,7 +23,7 @@ tape('Levels are default if custom levels are not supplied.', function (t) {
   t.deepEqual(levels.normalize({ levels: {} }), defaults.levels, 'empty obj');
   t.deepEqual(levels.normalize({ levels: [] }), defaults.levels, 'empty arr');
   t.deepEqual(
-      levels.normalize({ levels: _.noop }),
+      levels.normalize({ levels: noop }),
       defaults.levels,
       'function'
   );
@@ -128,13 +128,13 @@ tape('Logger allows custom log level methods at construction.', function (t) {
     levels: ['tiny', 'small']
   });
 
-  t.equal(_.isFunction(logger.tiny), true,
+  t.equal(isFunction(logger.tiny), true,
       'custom method present');
 
-  t.equal(_.isFunction(logger[defaults.levels[1]]), false,
+  t.equal(isFunction(logger[defaults.levels[1]]), false,
       'replaced default absent');
 
-  t.equal(_.isFunction(logger[defaults.levels[2]]), true,
+  t.equal(isFunction(logger[defaults.levels[2]]), true,
       'other default present');
 
   t.end();
@@ -221,7 +221,7 @@ tape('Arguments and regex patterns are serialized.', function (t) {
 
 tape('Custom value transformer is respected.', function (t) {
   function alwaysKittens(key, val) {
-    return _.isObject(val) ? val : 'kittens';
+    return isObject(val) ? val : 'kittens';
   }
 
   const log = {
@@ -529,7 +529,7 @@ tape('JSON logs match expected pattern.', function (t) {
 
       t.pass('valid JSON');
 
-      t.true(_.isNull(log.msg), 'JSON datatypes survive');
+      t.true(isNull(log.msg), 'JSON datatypes survive');
 
       t.true(timestampPattern.test(log.time), 'carried timestamp');
 

@@ -1,5 +1,5 @@
 import { Writable } from 'stream';
-import _ from 'lodash';
+import clone from 'lodash.clone';
 import * as defaults from './defaults';
 import Logger from './logger';
 
@@ -12,7 +12,7 @@ class BunyanStream extends Writable {
       objectMode: true
     });
 
-    const loggerOpts = _.clone(opts || {});
+    const loggerOpts = clone(opts || {});
 
     loggerOpts.timestamp = false;
     loggerOpts.levels = opts.levels || defaults.bunyanLevels;

@@ -1,4 +1,11 @@
-import _ from 'lodash';
+import inRange from 'lodash.inrange';
+import isObject from 'lodash.isobject';
+import isString from 'lodash.isstring';
+import isNumber from 'lodash.isnumber';
+import isUndefined from 'lodash.isundefined';
+import isFunction from 'lodash.isfunction';
+import isEmpty from 'lodash.isempty';
+
 import os from 'os';
 import net from 'net';
 import tls from 'tls';
@@ -81,19 +88,19 @@ class Logger extends Writable {
     });
 
     // Sanity checks
-    if (_.isUndefined(opts)) {
+    if (isUndefined(opts)) {
       throw new BadOptionsError(opts, text.noOptions());
     }
 
-    if (!_.isObject(opts)) {
+    if (!isObject(opts)) {
       throw new BadOptionsError(opts, text.optionsNotObj(typeof opts));
     }
 
-    if (_.isUndefined(opts.token)) {
+    if (isUndefined(opts.token)) {
       throw new BadOptionsError(opts, text.noToken());
     }
 
-    if (!_.isString(opts.token) || !tokenPattern.test(opts.token)) {
+    if (!isString(opts.token) || !tokenPattern.test(opts.token)) {
       throw new BadOptionsError(opts, text.invalidToken(opts.token));
     }
 
@@ -280,7 +287,7 @@ class Logger extends Writable {
 
     // If log is an object, it is serialized to string and may be augmented
     // with timestamp and level. For strings, these may be prepended.
-    if (_.isObject(modifiedLog)) {
+    if (isObject(modifiedLog)) {
       let safeTime;
       let safeLevel;
       let safeHost;
@@ -315,7 +322,7 @@ class Logger extends Writable {
       if (safeLevel) delete modifiedLog[safeLevel];
       if (safeHost) delete modifiedLog[safeHost];
     } else {
-      if (_.isEmpty(modifiedLog)) {
+      if (isEmpty(modifiedLog)) {
         this.emit(errorEvent, new LogentriesError(text.noLogMessage()));
         return;
       }
@@ -552,7 +559,7 @@ class Logger extends Writable {
   }
 
   set host(val) {
-    if (!_.isString(val) || !val.length) {
+    if (!isString(val) || !val.length) {
       this._host = defaults.host;
       return;
     }
@@ -605,7 +612,7 @@ class Logger extends Writable {
   set minLevel(val) {
     const [num] = this.toLevel(val);
 
-    this._minLevel = _.isNumber(num) ? num : 0;
+    this._minLevel = isNumber(num) ? num : 0;
   }
 
   get port() {
@@ -614,7 +621,7 @@ class Logger extends Writable {
 
   set port(val) {
     const port = parseFloat(val);
-    if (Number.isInteger(port) && _.inRange(port, 65536)) this._port = port;
+    if (Number.isInteger(port) && inRange(port, 65536)) this._port = port;
   }
 
   get replacer() {
@@ -622,7 +629,7 @@ class Logger extends Writable {
   }
 
   set replacer(val) {
-    this._replacer = _.isFunction(val) ? val : undefined;
+    this._replacer = isFunction(val) ? val : undefined;
     this.serialize = build(this);
   }
 
@@ -635,7 +642,7 @@ class Logger extends Writable {
       this._inactivityTimeout = parseInt(val, 10);
     }
 
-    if (!_.isNumber(this._inactivityTimeout)) {
+    if (!isNumber(this._inactivityTimeout)) {
       this._inactivityTimeout = defaults.inactivityTimeout;
     }
   }

@@ -1,4 +1,12 @@
-import _ from 'lodash';
+import reduce from 'lodash.reduce';
+import isObject from 'lodash.isobject';
+import flow from 'lodash.flow';
+import isNaN from 'lodash.isnan';
+import isError from 'lodash.iserror';
+import isArguments from 'lodash.isarguments';
+import isRegExp from 'lodash.isregexp';
+import toArray from 'lodash.toarray';
+
 import jsonSS from 'json-stringify-safe';
 
 // patterns
@@ -39,24 +47,24 @@ const errReplacer = (val, withStack) => {
 const flat = (serialize, arraysToo) =>
     (obj) => {
       const serializedObj = JSON.parse(serialize(obj));
-      if (!_.isObject(serializedObj)) return serializedObj;
+      if (!isObject(serializedObj)) return serializedObj;
 
-      const flatObj = _.reduce(serializedObj, function _flat(target, val, key) {
+      const flatObj = reduce(serializedObj, function _flat(target, val, key) {
         const keyContext = this.slice();
         keyContext.push(key);
 
         const joinedKey = keyContext.join('.');
         const newTarget = target;
-        if (!_.isObject(val)) {
+        if (!isObject(val)) {
           newTarget[joinedKey] = val;
         } else if (!arraysToo && Array.isArray(val)) {
           newTarget[joinedKey] = val.map(newVal => {
-            if (!_.isObject(newVal)) return newVal;
+            if (!isObject(newVal)) return newVal;
 
-            return _.reduce(newVal, _flat, {}, []);
+            return reduce(newVal, _flat, {}, []);
           });
         } else {
-          _.reduce(val, _flat, newTarget, keyContext);
+          reduce(val, _flat, newTarget, keyContext);
         }
 
         return newTarget;
@@ -80,27 +88,27 @@ const build = ({
   // just want to dump objects in the log hole.
 
   // If the user supplied a custom replacer, it is applied first.
-  const replace = _.flow(replacer, val => {
+  const replace = flow(replacer, val => {
     // Prototypeless object
-    if (_.isObject(val) && !Object.getPrototypeOf(val)) {
+    if (isObject(val) && !Object.getPrototypeOf(val)) {
       return val;
     }
 
-    if (_.isObject(val) && !(val instanceof Object)) {
+    if (isObject(val) && !(val instanceof Object)) {
       return val;
     }
 
     // Trouble primitives
-    if (_.isNaN(val)) return 'NaN';
+    if (isNaN(val)) return 'NaN';
     if (val === Infinity) return 'Infinity';
     if (val === -Infinity) return '-Infinity';
     if (1 / val === -Infinity) return '-0';
     if (typeof val === 'symbol') return val.toString();
 
     // Trouble objects
-    if (_.isError(val)) return errReplacer(val, withStack);
-    if (_.isArguments(val)) return _.toArray(val);
-    if (_.isRegExp(val)) return val.toString();
+    if (isError(val)) return errReplacer(val, withStack);
+    if (isArguments(val)) return toArray(val);
+    if (isRegExp(val)) return val.toString();
     if (isNewIterable(val)) return [...val];
 
     // - Error, regexp, maps and sets would have been `{}`
@@ -117,7 +125,8 @@ const build = ({
 
   // json-stringify-safe is a JSON.stringify wrapper that takes care of
   // circular references.
-  const serialize = _.partial(jsonSS, _, replace);
+
+  const serialize = (...args) => jsonSS(...args, replace);
 
   return flatten ? flat(serialize, flattenArrays) : serialize;
 };

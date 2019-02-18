@@ -23,6 +23,10 @@
     {
       "name": "Paul Dixon",
       "email": "paul.dixon@logentries.com"
+    },
+    {
+      "name": "Ady Levy",
+      "email": "ady@homeis.com"
     }
   ],
   "license": "BSD-3-Clause",
@@ -45,7 +49,26 @@
   "dependencies": {
     "babel-runtime": "6.6.1",
     "json-stringify-safe": "5.0.1",
-    "lodash": "3.9.3",
+    "lodash.reduce": "^3.1.2",
+    "lodash.inrange": "^3.3.6",
+    "lodash.merge": "^4.6.1",
+    "lodash.isobject": "^3.0.2",
+    "lodash.isstring": "^4.0.1",
+    "lodash.isnumber": "^3.0.3",
+    "lodash.isfunction": "^3.0.9",
+    "lodash.isempty": "^4.4.0",
+    "lodash.isnull": "^3.0.0",
+    "lodash.isundefined": "^3.0.1",
+    "lodash.values": "^4.3.0",
+    "lodash.includes": "^4.3.0",
+    "lodash.filter": "^4.6.0",
+    "lodash.flow": "^3.5.0",
+    "lodash.clone": "^4.5.0",
+    "lodash.isnan": "^3.0.2",
+    "lodash.iserror": "^3.1.1",
+    "lodash.isarguments": "^3.1.0",
+    "lodash.isregexp": "^4.0.1",
+    "lodash.toarray": "^4.4.0",
     "reconnect-core": "1.3.0"
   },
   "devDependencies": {

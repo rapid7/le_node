@@ -1,11 +1,20 @@
-import _ from 'lodash';
+import reduce from 'lodash.reduce';
+import inRange from 'lodash.inrange';
+import isObject from 'lodash.isobject';
+import isString from 'lodash.isstring';
+import isNumber from 'lodash.isnumber';
+import isNull from 'lodash.isnull';
+import isUndefined from 'lodash.isundefined';
+import values from 'lodash.values';
+import filter from 'lodash.filter';
+import includes from 'lodash.includes';
 import * as defaults from './defaults';
 import text from './text';
 import { BadOptionsError } from './error';
 
 // level numbers
 export const isNumberValid = n =>
-Number.isInteger(parseFloat(n)) && _.inRange(n, 8);
+Number.isInteger(parseFloat(n)) && inRange(n, 8);
 
 /**
  * Normalize the array
@@ -19,9 +28,9 @@ const normArr = (arr, opts) => {
   }
 
   return arr.map(val => {
-    if (val && _.isString(val)) return val;
-    if (_.isNumber(val) && isFinite(val)) return val.toString();
-    if (_.isNull(val) || _.isUndefined(val)) return undefined;
+    if (val && isString(val)) return val;
+    if (isNumber(val) && isFinite(val)) return val.toString();
+    if (isNull(val) || isUndefined(val)) return undefined;
 
     throw new BadOptionsError(opts, text.levelNotString(val));
   });
@@ -34,7 +43,7 @@ const normArr = (arr, opts) => {
  * @param opts
  */
 const normObj = (obj, opts) => {
-  const lvlNums = _.values(obj);
+  const lvlNums = values(obj);
 
   for (const num of lvlNums) {
     if (!isNumberValid(num)) {
@@ -42,16 +51,12 @@ const normObj = (obj, opts) => {
     }
   }
 
-  const duplicates =
-      _(obj).countBy().pick(lvl => lvl > 1)
-          .keys()
-          .value();
-
+  const duplicates = filter(values(obj), (val, i, iteratee) => includes(iteratee, val, i + 1));
   if (duplicates.length) {
     throw new BadOptionsError(opts, text.duplicateLevelNums(duplicates));
   }
 
-  return _.reduce(obj, (arr, i, name) => {
+  return reduce(obj, (arr, i, name) => {
     const reducedArr = arr;
     reducedArr[i] = name;
     return reducedArr;
@@ -66,7 +71,7 @@ const normObj = (obj, opts) => {
 export const normalize = (opts) => {
   let custom = opts.levels;
 
-  if (!_.isUndefined(custom) && !_.isNull(custom) && !_.isObject(custom)) {
+  if (!isUndefined(custom) && !isNull(custom) && !isObject(custom)) {
     throw new BadOptionsError(opts, text.levelsNotObj(typeof custom));
   }
 
@@ -78,10 +83,7 @@ export const normalize = (opts) => {
 
   const levels = defaults.levels.map((lvl, i) => custom[i] || lvl);
 
-  const duplicates =
-      _(levels).countBy().pick(count => count > 1)
-          .keys()
-          .value();
+  const duplicates = filter(values(levels), (val, i, iteratee) => includes(iteratee, val, i + 1));
 
   if (duplicates.length) {
     throw new BadOptionsError(opts, text.duplicateLevels(duplicates));
