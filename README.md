@@ -39,7 +39,6 @@ they wish to update.
 - [Changelog (Post-Merge)](#changelog-post-merge)
 - [Changelog (Old Logentries-Client)](#changelog-old-logentries-client)
 - [Changelog (Old le_node)](#changelog-old-le_node)
-- [Contact Support](#contact-support)
 
 <!-- /MarkdownTOC -->
 
