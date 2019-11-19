@@ -39,7 +39,6 @@ they wish to update.
 - [Changelog (Post-Merge)](#changelog-post-merge)
 - [Changelog (Old Logentries-Client)](#changelog-old-logentries-client)
 - [Changelog (Old le_node)](#changelog-old-le_node)
-- [Contact Support](#contact-support)
 
 <!-- /MarkdownTOC -->
 
@@ -589,7 +588,3 @@ test thoroughly before updating an existing codebase to use the new client.
 ### 0.0.1
 
  - Initial commit
- 
- ## Contact Support
-
-Please email our support team at support@logentries.com if you need any help. 
