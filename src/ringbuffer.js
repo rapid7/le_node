@@ -27,6 +27,11 @@ class RingBuffer extends EventEmitter {
     return this.records.shift();
   }
 
+  empty() {
+    this.bufferWasFull = false;
+    this.records = [];
+  }
+
   isEmpty() {
     return this.records.length === 0;
   }

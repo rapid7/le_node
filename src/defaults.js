@@ -10,6 +10,8 @@ export const portSecure = 443;
 
 export const reconnectInitialDelay = 1000;
 
+export const reconnectFailAfter = Infinity;
+
 export const reconnectMaxDelay = 15 * 1000;
 
 export const reconnectBackoffStrategy = 'fibonacci';

@@ -9,6 +9,9 @@ module.exports = gobble('src').transform('babel', {
   ],
   plugins: [
     'syntax-decorators',
+    ['babel-plugin-transform-builtin-extend', {
+      globals: ['Error']
+    }],
     'transform-decorators-legacy',
     'transform-runtime',
     'add-module-exports'

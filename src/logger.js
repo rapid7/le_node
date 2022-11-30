@@ -13,7 +13,8 @@ import text from './text';
 import build from './serialize';
 import {
     BadOptionsError,
-    LogentriesError
+    LogentriesError,
+    ReconnectFailedError,
 } from './error';
 import RingBuffer from './ringbuffer';
 import BunyanStream from './bunyanstream';
@@ -140,6 +141,8 @@ class Logger extends Writable {
     this.inactivityTimeout = opts.inactivityTimeout || defaults.inactivityTimeout;
     this.disableTimeout = opts.disableTimeout;
     this.token = opts.token;
+    this.reconnectFailed = false;
+    this.reconnectFailAfter = opts.reconnectFailAfter || defaults.reconnectFailAfter;
     this.reconnectInitialDelay = opts.reconnectInitialDelay || defaults.reconnectInitialDelay;
     this.reconnectMaxDelay = opts.reconnectMaxDelay || defaults.reconnectMaxDelay;
     this.reconnectBackoffStrategy =
@@ -187,6 +190,7 @@ class Logger extends Writable {
     this.on(bufferDrainEvent, () => {
       this.debugLogger.log('RingBuffer drained.');
       this.drained = true;
+      this.reconnectFailed = false;
     });
 
     this.on(timeoutEvent, () => {
@@ -211,6 +215,21 @@ class Logger extends Writable {
    */
   _write(ch, enc, cb) {
     this.drained = false;
+
+    if (this.reconnectFailed) {
+      this.ringBuffer.read();
+
+      if (this.ringBuffer.isEmpty()) {
+        this.emit(bufferDrainEvent);
+        // this event is DEPRECATED - will be removed in next major release.
+        // new users should use 'buffer drain' event instead.
+        this.emit('connection drain');
+      }
+
+      cb();
+      return;
+    }
+
     this.connection.then(conn => {
       const record = this.ringBuffer.read();
       if (record) {
@@ -233,8 +252,15 @@ class Logger extends Writable {
       }
       cb();
     }).catch(err => {
-      this.emit(errorEvent, err);
-      this.debugLogger.log(`Error: ${err}`);
+      if (err instanceof ReconnectFailedError) {
+        this.ringBuffer.read(); // this connection failed, shift the buffer
+        this.reconnectFailed = true;
+        this.debugLogger.log('Error: Reconnect failed');
+      } else {
+        this.emit(errorEvent, err);
+        this.debugLogger.log(`Error: ${err}`);
+      }
+
       cb();
     });
   }
@@ -413,12 +439,12 @@ class Logger extends Writable {
       initialDelay: this.reconnectInitialDelay,
       maxDelay: this.reconnectMaxDelay,
       strategy: this.reconnectBackoffStrategy,
-      failAfter: Infinity,
+      failAfter: this.reconnectFailAfter,
       randomisationFactor: 0,
       immediate: false
     });
 
-    this.connection = new Promise((resolve) => {
+    this.connection = new Promise((resolve, reject) => {
       const connOpts = {
         host: this.host,
         port: this.port
@@ -440,6 +466,10 @@ class Logger extends Writable {
         if (n > 0) {
           this.debugLogger.log(`Trying to reconnect. Times: ${n} , previous delay: ${delay}`);
         }
+      });
+
+      this.reconnection.once('fail', () => {
+        reject(new ReconnectFailedError());
       });
 
       this.reconnection.once('disconnect', () => {
@@ -579,6 +609,14 @@ class Logger extends Writable {
     this._json = val;
   }
 
+  get reconnectFailed() {
+    return this._reconnectFailed;
+  }
+
+  set reconnectFailed(val) {
+    this._reconnectFailed = val;
+  }
+
   get reconnectMaxDelay() {
     return this._reconnectMaxDelay;
   }
@@ -593,6 +631,14 @@ class Logger extends Writable {
 
   set reconnectInitialDelay(val) {
     this._reconnectInitialDelay = val;
+  }
+
+  get reconnectFailAfter() {
+    return this._reconnectFailAfter;
+  }
+
+  set reconnectFailAfter(val) {
+    this._reconnectFailAfter = val;
   }
 
   get reconnectBackoffStrategy() {
